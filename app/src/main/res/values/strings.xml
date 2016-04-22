@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">TravelDiary</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_ac_test_album">AcTestAlbum</string>
+    <string name="title_activity_test_pic_from_intent">TestPicFromIntent</string>
+    <string name="title_activity_ac_list_view">AcListView</string>
+    <string-array name="books">
+        <item>英汉大词典</item>
+        <item >口袋妖怪百科</item>
+        <item>war3攻略</item>
+        <item>高等数学</item>
+    </string-array>
+    <string name="title_activity_act_view_fliper">ActViewFliper</string>
+    <string name="title_activity_act_view_switcher">ActViewSwitcher</string>
+    <string name="title_activity_act_image_switcher">ActImageSwitcher</string>
+    <string name="title_activity_act_notification">ActNotification</string>
+    <string name="title_activity_act_test_action_bar">ActTestActionBar</string>
+    <string name="title_activity_act_uithread">ActUIThread</string>
+    <string name="title_activity_test_location">TestLocation</string>
+    <string name="title_activity_test_file">TestFile</string>
+    <string name="title_activity_act_create">ActCreate</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_act_new_pic">ActNewPic</string>
+    <string name="title_activity_act_new_text">ActNewText</string>
+    <string name="title_activity_act_new_audio">ActNewAudio</string>
+    <string name="title_activity_act_new_video">ActNewVideo</string>
+    <string name="title_activity_act_new_trace">ActNewTrace</string>
+    <string name="title_activity_abs_act_new_media">AbsActNewMedia</string>
+</resources>
