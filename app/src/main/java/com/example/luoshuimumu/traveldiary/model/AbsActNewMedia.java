@@ -77,7 +77,9 @@ public abstract class AbsActNewMedia extends ActionBarActivity {
         intent.putExtra("uri", mUri);
         intent.putExtra("path", mPath);
         //应该还有定位信息
-        intent.putExtra("location", mLocation);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("location", mLocation);
+        intent.putExtras(bundle);
         setResult(resultCode, intent);
         finishActivity(ActCreate.REQUEST_CODE_NEW_MEDIA);
     }

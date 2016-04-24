@@ -86,6 +86,7 @@ public class BDLocationSingleton {
     public static void startPosition() {
         FLAG_COMPLETE = false;
         client.start();
+
     }
 
     /**

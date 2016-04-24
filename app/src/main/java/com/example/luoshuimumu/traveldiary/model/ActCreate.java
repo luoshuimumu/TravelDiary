@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 
+import com.baidu.location.BDLocation;
 import com.example.luoshuimumu.traveldiary.R;
+import com.example.luoshuimumu.traveldiary.model.DB.MediaSqliteHelper;
 import com.example.luoshuimumu.traveldiary.model.Map.BDLocationSingleton;
 import com.example.luoshuimumu.traveldiary.model.frag.AbsFragxxxList;
 
@@ -29,6 +31,7 @@ public class ActCreate extends ActionBarActivity {
     FragmentManager mFragmentManager;
     AbsFragxxxList fragDiaryList;
     AbsFragxxxList fragMapList;
+    public MediaSqliteHelper dbHelper;
 
     //地图模块
 //    BDLocationListener mBDListener = null;
@@ -42,6 +45,8 @@ public class ActCreate extends ActionBarActivity {
 
 //        BDLocationSingleton.setListener(getmBDListener());
         mFragmentManager = getSupportFragmentManager();
+        dbHelper = new MediaSqliteHelper(getApplicationContext(), MediaSqliteHelper.NAME_MEDIA_SQL, null, 1);
+
     }
 
 
@@ -109,19 +114,19 @@ public class ActCreate extends ActionBarActivity {
             //入库 更新ui
             switch (resultCode) {
                 case RESULT_CODE_NEW_PIC:
-                    insertPic();
+                    insertPic(data);
                     break;
                 case RESULT_CODE_NEW_TEXT:
-                    insertText();
+                    insertText(data);
                     break;
                 case RESULT_CODE_NEW_AUDIO:
-                    insertAudio();
+                    insertAudio(data);
                     break;
                 case RESULT_CODE_NEW_VIDEO:
-                    insertVideo();
+                    insertVideo(data);
                     break;
                 case RESULT_CODE_NEW_TRACE:
-                    insertText();
+                    insertTrace(data);
                     break;
                 default:
                     break;
@@ -162,26 +167,46 @@ public class ActCreate extends ActionBarActivity {
         startActivityForResult(i, REQUEST_CODE_NEW_MEDIA, bundle);
     }
 
-    private boolean insertPic() {
+    /**
+     * 在这里要调用MediaSqliteHelper.insertMedia(Intent) ,需要在intent参数中
+     * 加上type
+     * path就是title 可以不用再存一次title
+     *
+     * @return
+     */
+    private boolean insertPic(Intent data) {
+        data.putExtra("type", "img");
+        insertData(data);
         return true;
     }
 
-    private boolean insertText() {
+    private boolean insertText(Intent data) {
+        data.putExtra("type", "text");
+        insertData(data);
         return true;
     }
 
-    private boolean insertAudio() {
+    private boolean insertAudio(Intent data) {
+        data.putExtra("type", "audio");
+        insertData(data);
         return true;
     }
 
-    private boolean insertVideo() {
+    private boolean insertVideo(Intent data) {
+        data.putExtra("type", "video");
+        insertData(data);
         return true;
     }
 
-    private boolean insertTrace() {
+    private boolean insertTrace(Intent data) {
+        data.putExtra("type", "trace");
+        insertData(data);
         return true;
     }
 
+    /**
+     * 刷新方法 应查询数据库 更新listview的数据
+     */
     private void refreshUI() {
 
     }
@@ -237,4 +262,40 @@ public class ActCreate extends ActionBarActivity {
 //    public BDLocation getmBDCurrentLocation() {
 //        return mBDCurrentLocation;
 //    }
+
+    /**
+     * 向数据库插入数据 这个方法似乎不该由它持有？
+     *
+     * @param intent 此方法只在ActCreate接收到返回结果(带intent)时调用
+     */
+    public void insertData(Intent intent) {
+        String type = intent.getStringExtra("type");
+        String time = intent.getStringExtra("time");
+        String uri = intent.getStringExtra("uri");
+        String path = intent.getStringExtra("path");
+        BDLocation location = intent.getParcelableExtra("location");
+
+        //插入语句
+//        create table " + "media" + " (_id integer" +
+//        "primary key autoincrement,type varchar(255)," +
+//                "date varchar(255),location varchar(255),uri varchar(255)," +
+//                "path varchar(255));";
+
+        dbHelper.getReadableDatabase().execSQL(
+                "insert into media (type,date,location,uri,path) values(" +
+                        type + "," + time + "," + location.getPoiList().get(0) + ","
+                        + uri + "," + path + ");"
+        );
+    }
+
+    /**
+     * 关闭数据库
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (dbHelper != null) {
+            dbHelper.close();
+        }
+    }
 }

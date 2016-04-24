@@ -6,8 +6,20 @@ import android.database.sqlite.SQLiteDatabase;
  * Created by luoshuimumu on 2016/4/13.
  */
 public class DBUtils {
+
+
+
     //在title表插入新的轨迹
-    public static void insertTraceTitle(SQLiteDatabase db,String name){
+    public static void insertTraceTitle(SQLiteDatabase db, String name) {
+
+    }
+
+    /**
+     * 准备 创建或打开数据库
+     */
+    public static void create(){
+
+
 
     }
 }
