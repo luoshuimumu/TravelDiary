@@ -45,7 +45,19 @@ public class ActCreate extends ActionBarActivity {
 
 //        BDLocationSingleton.setListener(getmBDListener());
         mFragmentManager = getSupportFragmentManager();
+        initSQLite();
+        initView();
+
+    }
+
+    private void initSQLite() {
         dbHelper = new MediaSqliteHelper(getApplicationContext(), MediaSqliteHelper.NAME_MEDIA_SQL, null, 1);
+    }
+
+    /**
+     * 查询数据库获取多媒体条目
+     */
+    private void initView() {
 
     }
 
