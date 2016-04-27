@@ -35,7 +35,7 @@ public abstract class AbsFragxxxList extends Fragment {
     Handler mUIHandler;
 
     //与activity交互
-    abstract void refreshUI();
+//    abstract void refreshUI();
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -130,6 +130,6 @@ public abstract class AbsFragxxxList extends Fragment {
         public void onFragmentInteraction(Uri uri);
     }
 
-    abstract public void refreshLocation();
+//    abstract public void refreshLocation();
 
 }

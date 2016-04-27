@@ -6,14 +6,21 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
 import com.example.luoshuimumu.traveldiary.R;
 import com.example.luoshuimumu.traveldiary.model.DB.MediaSqliteHelper;
 import com.example.luoshuimumu.traveldiary.model.Map.BDLocationSingleton;
 import com.example.luoshuimumu.traveldiary.model.frag.AbsFragxxxList;
+import com.example.luoshuimumu.traveldiary.model.frag.ViewPagerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ActCreate extends ActionBarActivity {
@@ -36,6 +43,34 @@ public class ActCreate extends ActionBarActivity {
     //地图模块
 //    BDLocationListener mBDListener = null;
 
+    //内置五个fragment 分别展示不同类型媒体信息的列表
+    private ViewPager mViewPager;
+
+    private AbsFragxxxList mFragText;
+    private AbsFragxxxList mFragPic;
+    private AbsFragxxxList mFragAudio;
+    private AbsFragxxxList mFragVideo;
+    private AbsFragxxxList mFragTrace;
+
+    //五个切换按钮 五个切换图片 在切换到不同fragment时切换
+    private ImageView iv_frag_text;
+    private ImageView iv_frag_audio;
+    private ImageView iv_frag_pic;
+    private ImageView iv_frag_video;
+    private ImageView iv_frag_trace;
+
+    private TextView tv_frag_text;
+    private TextView tv_frag_audio;
+    private TextView tv_frag_pic;
+    private TextView tv_frag_video;
+    private TextView tv_frag_trace;
+
+    private LinearLayout ll_frag_text;
+    private LinearLayout ll_frag_pic;
+    private LinearLayout ll_frag_audio;
+    private LinearLayout ll_frag_video;
+    private LinearLayout ll_frag_trace;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +83,9 @@ public class ActCreate extends ActionBarActivity {
         initSQLite();
         initView();
 
+        //需要设置fragmentList和viewPager的关系
+        initViewPager();
+
     }
 
     private void initSQLite() {
@@ -58,7 +96,119 @@ public class ActCreate extends ActionBarActivity {
      * 查询数据库获取多媒体条目
      */
     private void initView() {
+        initViewWidget();
 
+    }
+
+    private void initViewWidget() {
+        mViewPager = (ViewPager) findViewById(R.id.content);
+
+        iv_frag_text = (ImageView) findViewById(R.id.act_create_iv_frag_text);
+        iv_frag_audio = (ImageView) findViewById(R.id.act_create_iv_frag_audio);
+        iv_frag_pic = (ImageView) findViewById(R.id.act_create_iv_frag_pic);
+        iv_frag_video = (ImageView) findViewById(R.id.act_create_iv_frag_video);
+        iv_frag_trace = (ImageView) findViewById(R.id.act_create_iv_frag_trace);
+        tv_frag_text = (TextView) findViewById(R.id.act_create_tv_frag_text);
+        tv_frag_audio = (TextView) findViewById(R.id.act_create_tv_frag_audio);
+        tv_frag_pic = (TextView) findViewById(R.id.act_create_tv_frag_pic);
+        tv_frag_video = (TextView) findViewById(R.id.act_create_tv_frag_video);
+        tv_frag_trace = (TextView) findViewById(R.id.act_create_tv_frag_trace);
+
+        ll_frag_text = (LinearLayout) findViewById(R.id.act_create_ll_frag_text);
+        ll_frag_pic = (LinearLayout) findViewById(R.id.act_create_ll_frag_pic);
+        ll_frag_audio = (LinearLayout) findViewById(R.id.act_create_ll_frag_audio);
+        ll_frag_video = (LinearLayout) findViewById(R.id.act_create_ll_frag_video);
+        ll_frag_trace = (LinearLayout) findViewById(R.id.act_create_ll_frag_trace);
+    }
+
+    private class onFragChangeClickedListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.act_create_ll_frag_text: {
+
+                    break;
+                }
+                case R.id.act_create_ll_frag_pic: {
+                    break;
+                }
+                case R.id.act_create_ll_frag_audio: {
+                    break;
+                }
+                case R.id.act_create_ll_frag_video: {
+                    break;
+                }
+                case R.id.act_create_ll_frag_trace: {
+                    break;
+                }
+                default:
+                    break;
+            }
+
+
+        }
+    }
+
+    /**
+     * 只用于改变 frag切换按钮的图片和颜色
+     *
+     * @param index
+     */
+    private void setTabSelection(int index) {
+        clearTabSelection();
+
+        switch (index) {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    /**
+     * 将所有fragment切换按钮的图片和文字颜色切换为初始状态
+     */
+    private void clearTabSelection() {
+
+    }
+
+    /**
+     * 需要设置fragmentList和viewPager的关系
+     */
+
+    private void initViewPager() {
+        final ArrayList<AbsFragxxxList> fragList = new ArrayList<AbsFragxxxList>();
+        fragList.add(mFragText);
+        fragList.add(mFragPic);
+        fragList.add(mFragAudio);
+        fragList.add(mFragVideo);
+        fragList.add(mFragTrace);
+        mViewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), fragList));
+        mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                setTabSelection(position);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
 
@@ -261,7 +411,7 @@ public class ActCreate extends ActionBarActivity {
         List<android.support.v4.app.Fragment> list = mFragmentManager.getFragments();
         for (android.support.v4.app.Fragment fragment : list) {
             if (fragment != null && fragment.isVisible()) {
-                ((AbsFragxxxList) fragment).refreshLocation();
+//                ((AbsFragxxxList) fragment).refreshLocation();
             }
         }
     }

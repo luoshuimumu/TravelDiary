@@ -1,10 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.luoshuimumu.traveldiary.model.ActCreate">
 
+    <LinearLayout
+        android:id="@+id/tag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|top"
+        android:orientation="horizontal">
+
+
+        <LinearLayout
+            android:id="@+id/act_create_ll_frag_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/act_create_iv_frag_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:id="@+id/act_create_tv_frag_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="text" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/act_create_ll_frag_pic"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/act_create_iv_frag_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:id="@+id/act_create_tv_frag_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="pic" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/act_create_ll_frag_audio"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/act_create_iv_frag_audio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:id="@+id/act_create_tv_frag_audio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="aud" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/act_create_ll_frag_video"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/act_create_iv_frag_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:id="@+id/act_create_tv_frag_video"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="vid" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/act_create_ll_frag_trace"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/act_create_iv_frag_trace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_launcher" />
+
+            <TextView
+                android:id="@+id/act_create_tv_frag_trace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="tra" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ViewPager
+        android:id="@+id/content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></ViewPager>
 </RelativeLayout>

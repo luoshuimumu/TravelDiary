@@ -10,9 +10,9 @@ import java.util.ArrayList;
  * Created by luoshuimumu on 2016/4/27.
  */
 public class ViewPagerAdapter extends FragmentStatePagerAdapter {
-    ArrayList<Fragment> list;
+    ArrayList<AbsFragxxxList> list;
 
-    public ViewPagerAdapter(FragmentManager fm, ArrayList<Fragment> list) {
+    public ViewPagerAdapter(FragmentManager fm, ArrayList<AbsFragxxxList> list) {
         super(fm);
         this.list = list;
     }
