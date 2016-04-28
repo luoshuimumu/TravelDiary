@@ -14,7 +14,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.READ_LOGS" />
-    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -72,17 +71,9 @@
         <activity
             android:name=".test.ActUIThread"
             android:label="@string/title_activity_act_uithread">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
-        <service
-            android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process="remote" />
 
         <activity
             android:name=".test.TestLocation"
@@ -90,15 +81,19 @@
         <activity
             android:name=".test.TestFile"
             android:label="@string/title_activity_test_file">
+
+        </activity>
+        <activity
+            android:name=".model.ActCreate"
+            android:label="@string/title_activity_act_create">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
-        <activity
-            android:name=".model.ActCreate"
-            android:label="@string/title_activity_act_create" />
         <activity
             android:name=".model.ActNewPic"
             android:label="@string/title_activity_act_new_pic" />

@@ -45,6 +45,7 @@ public class ActCreate extends ActionBarActivity {
 
     //内置五个fragment 分别展示不同类型媒体信息的列表
     private ViewPager mViewPager;
+    ArrayList<AbsFragxxxList> mFragList;
 
     private AbsFragxxxList mFragText;
     private AbsFragxxxList mFragPic;
@@ -186,13 +187,14 @@ public class ActCreate extends ActionBarActivity {
      */
 
     private void initViewPager() {
-        final ArrayList<AbsFragxxxList> fragList = new ArrayList<AbsFragxxxList>();
-        fragList.add(mFragText);
-        fragList.add(mFragPic);
-        fragList.add(mFragAudio);
-        fragList.add(mFragVideo);
-        fragList.add(mFragTrace);
-        mViewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), fragList));
+        mFragList = new ArrayList<AbsFragxxxList>();
+        mFragList.add(mFragText);
+        mFragList.add(mFragPic);
+        mFragList.add(mFragAudio);
+        mFragList.add(mFragVideo);
+        mFragList.add(mFragTrace);
+        mViewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), mFragList));
+        mViewPager.setCurrentItem(0);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
