@@ -31,10 +31,9 @@
             android:enabled="true"
             android:process=":remote">
             <intent-filter>
-                <action android:name="com.baidu.location.service_v2.2"></action>
+                <action android:name="com.baidu.location.service_v2.2" />
             </intent-filter>
         </service>
-
 
         <!-- ???need fix -->
         <meta-data
@@ -70,28 +69,16 @@
             android:label="action" />
         <activity
             android:name=".test.ActUIThread"
-            android:label="@string/title_activity_act_uithread">
-
-        </activity>
-
-
+            android:label="@string/title_activity_act_uithread"></activity>
         <activity
             android:name=".test.TestLocation"
             android:label="@string/title_activity_test_location" />
         <activity
             android:name=".test.TestFile"
-            android:label="@string/title_activity_test_file">
-
-        </activity>
+            android:label="@string/title_activity_test_file"></activity>
         <activity
             android:name=".model.ActCreate"
             android:label="@string/title_activity_act_create">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
         <activity
@@ -109,7 +96,13 @@
         <activity
             android:name=".model.ActNewTrace"
             android:label="@string/title_activity_act_new_trace" />
+        <activity android:name=".test.ActTestViewPager">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

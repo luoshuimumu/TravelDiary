@@ -4,10 +4,8 @@ package com.example.luoshuimumu.traveldiary;
 import android.app.Application;
 import android.app.Service;
 import android.os.Vibrator;
-import android.provider.MediaStore;
 
 import com.baidu.mapapi.SDKInitializer;
-import com.example.luoshuimumu.traveldiary.model.DB.MediaSqliteHelper;
 import com.example.luoshuimumu.traveldiary.service.LocationService;
 
 /**
