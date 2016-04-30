@@ -4,7 +4,7 @@ package com.example.luoshuimumu.traveldiary.test;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app   .Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.luoshuimumu.traveldiary.R;
-import com.example.luoshuimumu.traveldiary.model.frag.AbsFragxxxList;
 import com.example.luoshuimumu.traveldiary.test.frag.BlankFragment1;
 import com.example.luoshuimumu.traveldiary.test.frag.BlankFragment2;
 import com.example.luoshuimumu.traveldiary.test.frag.BlankFragment3;

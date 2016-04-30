@@ -6,7 +6,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.widget.Toast;
 
 import com.example.luoshuimumu.traveldiary.R;
-import com.example.luoshuimumu.traveldiary.model.DB.DBUtils;
 
 import java.io.BufferedReader;
 import java.io.File;

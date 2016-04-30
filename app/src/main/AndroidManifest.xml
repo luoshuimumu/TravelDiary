@@ -79,7 +79,11 @@
         <activity
             android:name=".model.ActCreate"
             android:label="@string/title_activity_act_create">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".model.ActNewPic"
@@ -97,11 +101,7 @@
             android:name=".model.ActNewTrace"
             android:label="@string/title_activity_act_new_trace" />
         <activity android:name=".test.ActTestViewPager">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

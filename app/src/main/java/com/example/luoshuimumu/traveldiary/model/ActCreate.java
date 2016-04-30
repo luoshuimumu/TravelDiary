@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.baidu.location.BDLocation;
+import com.example.luoshuimumu.traveldiary.LocationApplication;
 import com.example.luoshuimumu.traveldiary.R;
 import com.example.luoshuimumu.traveldiary.model.DB.MediaSqliteHelper;
 import com.example.luoshuimumu.traveldiary.model.Map.BDLocationSingleton;
@@ -38,7 +40,7 @@ public class ActCreate extends ActionBarActivity {
     FragmentManager mFragmentManager;
     AbsFragxxxList fragDiaryList;
     AbsFragxxxList fragMapList;
-    public MediaSqliteHelper dbHelper;
+
 
     //地图模块
 //    BDLocationListener mBDListener = null;
@@ -46,6 +48,9 @@ public class ActCreate extends ActionBarActivity {
     //内置五个fragment 分别展示不同类型媒体信息的列表
     private ViewPager mViewPager;
     ArrayList<AbsFragxxxList> mFragList;
+
+    //怎么初始化
+    //初始化需要从数据库加载数据
 
     private AbsFragxxxList mFragText;
     private AbsFragxxxList mFragPic;
@@ -81,7 +86,6 @@ public class ActCreate extends ActionBarActivity {
 
 //        BDLocationSingleton.setListener(getmBDListener());
         mFragmentManager = getSupportFragmentManager();
-        initSQLite();
         initView();
 
         //需要设置fragmentList和viewPager的关系
@@ -89,9 +93,6 @@ public class ActCreate extends ActionBarActivity {
 
     }
 
-    private void initSQLite() {
-        dbHelper = new MediaSqliteHelper(getApplicationContext(), MediaSqliteHelper.NAME_MEDIA_SQL, null, 1);
-    }
 
     /**
      * 查询数据库获取多媒体条目
@@ -160,14 +161,19 @@ public class ActCreate extends ActionBarActivity {
 
         switch (index) {
             case 0:
+                tv_frag_text.setTextColor(Color.BLUE);
                 break;
             case 1:
+                tv_frag_audio.setTextColor(Color.BLUE);
                 break;
             case 2:
+                tv_frag_pic.setTextColor(Color.BLUE);
                 break;
             case 3:
+                tv_frag_video.setTextColor(Color.BLUE);
                 break;
             case 4:
+                tv_frag_trace.setTextColor(Color.BLUE);
                 break;
             default:
                 break;
@@ -179,7 +185,11 @@ public class ActCreate extends ActionBarActivity {
      * 将所有fragment切换按钮的图片和文字颜色切换为初始状态
      */
     private void clearTabSelection() {
-
+        tv_frag_text.setTextColor(Color.BLACK);
+        tv_frag_audio.setTextColor(Color.BLACK);
+        tv_frag_pic.setTextColor(Color.BLACK);
+        tv_frag_video.setTextColor(Color.BLACK);
+        tv_frag_trace.setTextColor(Color.BLACK);
     }
 
     /**
@@ -194,7 +204,7 @@ public class ActCreate extends ActionBarActivity {
         mFragList.add(mFragVideo);
         mFragList.add(mFragTrace);
         mViewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), mFragList));
-        mViewPager.setCurrentItem(0);
+        setTabSelection(0);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -445,7 +455,7 @@ public class ActCreate extends ActionBarActivity {
 //                "date varchar(255),location varchar(255),uri varchar(255)," +
 //                "path varchar(255));";
 
-        dbHelper.getReadableDatabase().execSQL(
+        LocationApplication.dbHelper.getReadableDatabase().execSQL(
                 "insert into media (type,date,location,uri,path) values(" +
                         type + "," + time + "," + location.getPoiList().get(0) + ","
                         + uri + "," + path + ");"
@@ -458,8 +468,8 @@ public class ActCreate extends ActionBarActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (dbHelper != null) {
-            dbHelper.close();
+        if (LocationApplication.dbHelper != null) {
+            LocationApplication.dbHelper.close();
         }
     }
 }

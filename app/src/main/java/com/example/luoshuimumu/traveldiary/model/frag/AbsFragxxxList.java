@@ -1,19 +1,26 @@
 package com.example.luoshuimumu.traveldiary.model.frag;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 
+import com.example.luoshuimumu.traveldiary.LocationApplication;
 import com.example.luoshuimumu.traveldiary.R;
+import com.example.luoshuimumu.traveldiary.model.DB.MediaEntity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,12 +32,16 @@ import java.util.List;
  * create an instance of this fragment.
  */
 public abstract class AbsFragxxxList extends Fragment {
+    //数据初始化模块
+    private boolean FLAG_DATA_INIT_COMPLETE = false;
+    private Dialog mWaitDialog;
+
     //通用控件
     ListView mListView;
     //通用适配器
     BaseAdapter mAdapter;
     //通用数据项
-    List<Object> mListData;
+    List<MediaEntity> mDataList;
 
     Handler mUIHandler;
 
@@ -40,12 +51,60 @@ public abstract class AbsFragxxxList extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM_TYPE = "type";
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    //type用于数据库查询函数时识别查询的媒体种类
+    //预设为数据表最长五十个
+    private String mType;
     private String mParam2;
+
+    /**
+     * 需要查date（可以生成title）uri location 三条数据
+     *
+     * @param type
+     */
+    private void initDataList(String type) throws NullPointerException {
+
+        String SQL = "select date,location,uri from media where type=" + type + ";";
+
+        mDataList = new ArrayList<>();
+        LocationApplication.dbHelper.getReadableDatabase().execSQL(SQL);
+        try {
+            Cursor cursor = LocationApplication.dbHelper.getReadableDatabase()
+                    .rawQuery(SQL, null);
+            while (cursor != null) {
+                MediaEntity entity = new MediaEntity();
+                entity.setDate(cursor.getString(0));
+                entity.setLocation(cursor.getString(1));
+                entity.setUri(cursor.getString(2));
+
+                mDataList.add(entity);
+                cursor.moveToNext();
+            }
+            cursor.close();
+            FLAG_DATA_INIT_COMPLETE = true;
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+    }
+//    Cursor cursor = db.rawQuery(“select * from person”, null);
+//
+//    while (cursor.moveToNext()) {
+//
+//        int personid = cursor.getInt(0); //获取第一列的值,第一列的索引从0开始
+//
+//        String name = cursor.getString(1);//获取第二列的值
+//
+//        int age = cursor.getInt(2);//获取第三列的值
+//
+//    }
+//
+//    cursor.close();
+//
+//    db.close();
 
     private OnFragmentInteractionListener mListener;
 
@@ -79,8 +138,35 @@ public abstract class AbsFragxxxList extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            mType = getArguments().getString(ARG_PARAM_TYPE);
             mParam2 = getArguments().getString(ARG_PARAM2);
+        }
+        waitDialogShow();
+        initDataList(mType);
+
+        //开启异步进程等待数据库初始化完成 取消等待dialog
+        //
+    }
+
+    /**
+     * 开启等待dialog
+     */
+    private void waitDialogShow() {
+        if (mWaitDialog == null) {
+            //在content里设置一个progressDialog
+            mWaitDialog = new ProgressDialog(getActivity());
+        }
+        if (!FLAG_DATA_INIT_COMPLETE) {
+            mWaitDialog.show();
+        }
+    }
+
+    /**
+     * 关闭等待dialog
+     */
+    private void waitDialogDismiss() {
+        if (mWaitDialog != null && mWaitDialog.isShowing()) {
+            mWaitDialog.show();
         }
     }
 
@@ -92,9 +178,9 @@ public abstract class AbsFragxxxList extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(Uri uri, String type) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction(uri, type);
         }
     }
 
@@ -127,9 +213,21 @@ public abstract class AbsFragxxxList extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
+        public void onFragmentInteraction(Uri uri, String type);
     }
 
 //    abstract public void refreshLocation();
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        waitDialogShow();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        waitDialogDismiss();
+    }
 }

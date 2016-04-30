@@ -6,6 +6,7 @@ import android.app.Service;
 import android.os.Vibrator;
 
 import com.baidu.mapapi.SDKInitializer;
+import com.example.luoshuimumu.traveldiary.model.DB.MediaSqliteHelper;
 import com.example.luoshuimumu.traveldiary.service.LocationService;
 
 /**
@@ -18,6 +19,16 @@ import com.example.luoshuimumu.traveldiary.service.LocationService;
 public class LocationApplication extends Application {
     public LocationService locationService;
     public Vibrator mVibrator;
+    public static MediaSqliteHelper dbHelper;
+
+    public static MediaSqliteHelper getDbHelper() {
+
+        return dbHelper;
+    }
+
+    public void initSQLite() {
+        dbHelper = new MediaSqliteHelper(getApplicationContext(), MediaSqliteHelper.NAME_MEDIA_SQL, null, 1);
+    }
 
     @Override
     public void onCreate() {
@@ -30,4 +41,6 @@ public class LocationApplication extends Application {
         SDKInitializer.initialize(getApplicationContext());
 
     }
+
+
 }
