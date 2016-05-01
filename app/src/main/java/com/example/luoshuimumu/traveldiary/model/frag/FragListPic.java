@@ -1,14 +1,19 @@
 package com.example.luoshuimumu.traveldiary.model.frag;
 
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.luoshuimumu.traveldiary.R;
+import com.example.luoshuimumu.traveldiary.model.DB.MediaEntity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,14 +24,7 @@ import com.example.luoshuimumu.traveldiary.R;
  * create an instance of this fragment.
  */
 public class FragListPic extends AbsFragxxxList {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    ListView listview;
 
     private OnFragmentInteractionListener mListener;
 
@@ -42,7 +40,7 @@ public class FragListPic extends AbsFragxxxList {
     public static FragListPic newInstance(String param1, String param2) {
         FragListPic fragment = new FragListPic();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
+        args.putString(ARG_PARAM_TYPE, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
@@ -55,23 +53,70 @@ public class FragListPic extends AbsFragxxxList {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+        //数据初始化已完成 直接加载进listview
+    }
+
+    private class PicAdapter extends BaseAdapter {
+        public PicAdapter(Context context) {
+            this.inflater = LayoutInflater.from(context);
+        }
+
+        private LayoutInflater inflater;
+
+        @Override
+        public int getCount() {
+            return mDataList.size();
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            Holder holder;
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.widget_frag_pic_listitem, null);
+                holder = new Holder();
+                holder.tv_title = (TextView) convertView.findViewById(R.id.tv_title);
+                holder.tv_content = (TextView) convertView.findViewById(R.id.tv_content);
+
+                convertView.setTag(holder);
+            } else {
+                holder = (Holder) convertView.getTag();
+            }
+            holder.tv_title.setText(getItem(position).getDate());
+            holder.tv_title.setText(getItem(position).getLocation());
+
+            return convertView;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public MediaEntity getItem(int position) {
+            return mDataList.get(position);
+        }
+
+        private class Holder {
+            TextView tv_title;
+            TextView tv_content;
         }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_frag_list_pic, container, false);
+        View view = inflater.inflate(R.layout.fragment_frag_list_pic, container, false);
+        listview = (ListView) view.findViewById(R.id.listview);
+        listview.setAdapter(new PicAdapter(getActivity()));
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(Uri uri, String type) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction(uri, type);
         }
     }
 
@@ -102,9 +147,9 @@ public class FragListPic extends AbsFragxxxList {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
+//    public interface OnFragmentInteractionListener {
+//        // TODO: Update argument type and name
+//        public void onFragmentInteraction(Uri uri);
+//    }
 
 }

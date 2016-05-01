@@ -7,6 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
  * Created by luoshuimumu on 2016/4/13.
  */
 public class MediaEntity {
+    public static final String COLUMN_NAME_TYPE="type";
+    public static final String COLUMN_NAME_DATE="date";
+    public static final String COLUMN_NAME_LCOATION="location";
+    public static final String COLUMN_NAME_URI="uri";
+    public static final String COLUMN_NAME_PATH="path";
+
     String type;
     String date;
     String location;

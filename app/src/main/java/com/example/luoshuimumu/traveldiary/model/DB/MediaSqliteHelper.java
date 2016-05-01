@@ -30,7 +30,7 @@ public class MediaSqliteHelper extends SQLiteOpenHelper {
 
     //创建数据表
     final String SQL_CREATE_TABLE_MEDIA = "create table " + "media" + " (_id integer" +
-            "primary key autoincrement,type varchar(255),date varchar(255),location varchar(255),uri varchar(255),path varchar(255));";
+            " primary key autoincrement,type varchar(255),date varchar(255),location varchar(255),uri varchar(255),path varchar(255));";
 
     public MediaSqliteHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);

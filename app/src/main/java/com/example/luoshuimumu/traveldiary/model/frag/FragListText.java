@@ -13,12 +13,12 @@ import com.example.luoshuimumu.traveldiary.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FragLlistText.OnFragmentInteractionListener} interface
+ * {@link FragListText.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FragLlistText#newInstance} factory method to
+ * Use the {@link FragListText#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragLlistText extends AbsFragxxxList {
+public class FragListText extends AbsFragxxxList {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,11 +36,11 @@ public class FragLlistText extends AbsFragxxxList {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FragLlistText.
+     * @return A new instance of fragment FragListText.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragLlistText newInstance(String param1, String param2) {
-        FragLlistText fragment = new FragLlistText();
+    public static FragListText newInstance(String param1, String param2) {
+        FragListText fragment = new FragListText();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -48,7 +48,7 @@ public class FragLlistText extends AbsFragxxxList {
         return fragment;
     }
 
-    public FragLlistText() {
+    public FragListText() {
         // Required empty public constructor
     }
 
@@ -69,9 +69,9 @@ public class FragLlistText extends AbsFragxxxList {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
+    public void onButtonPressed(Uri uri, String type) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            mListener.onFragmentInteraction(uri, type);
         }
     }
 
@@ -102,9 +102,9 @@ public class FragLlistText extends AbsFragxxxList {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri);
-    }
+//    public interface OnFragmentInteractionListener {
+//        // TODO: Update argument type and name
+//        public void onFragmentInteraction(Uri uri);
+//    }
 
 }

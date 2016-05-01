@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
@@ -17,15 +18,25 @@ import android.widget.TextView;
 import com.baidu.location.BDLocation;
 import com.example.luoshuimumu.traveldiary.LocationApplication;
 import com.example.luoshuimumu.traveldiary.R;
-import com.example.luoshuimumu.traveldiary.model.DB.MediaSqliteHelper;
+import com.example.luoshuimumu.traveldiary.model.DB.MediaEntity;
 import com.example.luoshuimumu.traveldiary.model.Map.BDLocationSingleton;
 import com.example.luoshuimumu.traveldiary.model.frag.AbsFragxxxList;
+import com.example.luoshuimumu.traveldiary.model.frag.FragListAudio;
+import com.example.luoshuimumu.traveldiary.model.frag.FragListPic;
+import com.example.luoshuimumu.traveldiary.model.frag.FragListText;
+import com.example.luoshuimumu.traveldiary.model.frag.FragListTrace;
+import com.example.luoshuimumu.traveldiary.model.frag.FragListVideo;
 import com.example.luoshuimumu.traveldiary.model.frag.ViewPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActCreate extends ActionBarActivity {
+public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFragmentInteractionListener {
+    @Override
+    public void onFragmentInteraction(Uri uri, String type) {
+
+    }
+
     protected static final int REQUEST_CODE_NEW_MEDIA = 1990;
 
     protected static final int RESULT_CODE_NEW_PIC = 1993;
@@ -116,31 +127,46 @@ public class ActCreate extends ActionBarActivity {
         tv_frag_video = (TextView) findViewById(R.id.act_create_tv_frag_video);
         tv_frag_trace = (TextView) findViewById(R.id.act_create_tv_frag_trace);
 
+        FragChangeClickedListener fragChangeClickedListener = new FragChangeClickedListener();
         ll_frag_text = (LinearLayout) findViewById(R.id.act_create_ll_frag_text);
         ll_frag_pic = (LinearLayout) findViewById(R.id.act_create_ll_frag_pic);
         ll_frag_audio = (LinearLayout) findViewById(R.id.act_create_ll_frag_audio);
         ll_frag_video = (LinearLayout) findViewById(R.id.act_create_ll_frag_video);
         ll_frag_trace = (LinearLayout) findViewById(R.id.act_create_ll_frag_trace);
+        ll_frag_text.setOnClickListener(fragChangeClickedListener);
+        ll_frag_pic.setOnClickListener(fragChangeClickedListener);
+        ll_frag_audio.setOnClickListener(fragChangeClickedListener);
+        ll_frag_video.setOnClickListener(fragChangeClickedListener);
+        ll_frag_trace.setOnClickListener(fragChangeClickedListener);
     }
 
-    private class onFragChangeClickedListener implements View.OnClickListener {
+    private class FragChangeClickedListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.act_create_ll_frag_text: {
-
+                    mViewPager.setCurrentItem(0);
+                    setTabSelection(0);
                     break;
                 }
                 case R.id.act_create_ll_frag_pic: {
+                    mViewPager.setCurrentItem(1);
+                    setTabSelection(1);
                     break;
                 }
                 case R.id.act_create_ll_frag_audio: {
+                    mViewPager.setCurrentItem(2);
+                    setTabSelection(2);
                     break;
                 }
                 case R.id.act_create_ll_frag_video: {
+                    mViewPager.setCurrentItem(3);
+                    setTabSelection(3);
                     break;
                 }
                 case R.id.act_create_ll_frag_trace: {
+                    mViewPager.setCurrentItem(4);
+                    setTabSelection(4);
                     break;
                 }
                 default:
@@ -158,16 +184,15 @@ public class ActCreate extends ActionBarActivity {
      */
     private void setTabSelection(int index) {
         clearTabSelection();
-
         switch (index) {
             case 0:
                 tv_frag_text.setTextColor(Color.BLUE);
                 break;
             case 1:
-                tv_frag_audio.setTextColor(Color.BLUE);
+                tv_frag_pic.setTextColor(Color.BLUE);
                 break;
             case 2:
-                tv_frag_pic.setTextColor(Color.BLUE);
+                tv_frag_audio.setTextColor(Color.BLUE);
                 break;
             case 3:
                 tv_frag_video.setTextColor(Color.BLUE);
@@ -194,15 +219,23 @@ public class ActCreate extends ActionBarActivity {
 
     /**
      * 需要设置fragmentList和viewPager的关系
+     * <p/>
+     * 这里初始化frag
      */
 
     private void initViewPager() {
         mFragList = new ArrayList<AbsFragxxxList>();
+        mFragText = FragListText.newInstance(MediaEntity.COLUMN_NAME_TYPE, "");
+        mFragPic = FragListPic.newInstance(MediaEntity.COLUMN_NAME_TYPE, "");
+        mFragAudio = FragListAudio.newInstance(MediaEntity.COLUMN_NAME_TYPE, "");
+        mFragVideo = FragListVideo.newInstance(MediaEntity.COLUMN_NAME_TYPE, "");
+        mFragTrace = FragListTrace.newInstance(MediaEntity.COLUMN_NAME_TYPE, "");
         mFragList.add(mFragText);
         mFragList.add(mFragPic);
         mFragList.add(mFragAudio);
         mFragList.add(mFragVideo);
         mFragList.add(mFragTrace);
+
         mViewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), mFragList));
         setTabSelection(0);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {

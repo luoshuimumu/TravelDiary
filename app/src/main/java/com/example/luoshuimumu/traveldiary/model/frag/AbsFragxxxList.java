@@ -51,14 +51,14 @@ public abstract class AbsFragxxxList extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM_TYPE = "type";
-    private static final String ARG_PARAM2 = "param2";
+    protected static final String ARG_PARAM_TYPE = MediaEntity.COLUMN_NAME_TYPE;
+    protected static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
     //type用于数据库查询函数时识别查询的媒体种类
     //预设为数据表最长五十个
-    private String mType;
-    private String mParam2;
+    protected String mParam1;
+    protected String mParam2;
 
     /**
      * 需要查date（可以生成title）uri location 三条数据
@@ -74,7 +74,7 @@ public abstract class AbsFragxxxList extends Fragment {
         try {
             Cursor cursor = LocationApplication.dbHelper.getReadableDatabase()
                     .rawQuery(SQL, null);
-            while (cursor != null) {
+            while (cursor != null&&cursor.getCount()!=0) {
                 MediaEntity entity = new MediaEntity();
                 entity.setDate(cursor.getString(0));
                 entity.setLocation(cursor.getString(1));
@@ -106,7 +106,7 @@ public abstract class AbsFragxxxList extends Fragment {
 //
 //    db.close();
 
-    private OnFragmentInteractionListener mListener;
+    protected OnFragmentInteractionListener mListener;
 
     /**
      * Use this factory method to create a new instance of
@@ -138,11 +138,11 @@ public abstract class AbsFragxxxList extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mType = getArguments().getString(ARG_PARAM_TYPE);
+            mParam1 = getArguments().getString(ARG_PARAM_TYPE);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        waitDialogShow();
-        initDataList(mType);
+//        waitDialogShow();
+        initDataList(mParam1);
 
         //开启异步进程等待数据库初始化完成 取消等待dialog
         //
@@ -222,12 +222,12 @@ public abstract class AbsFragxxxList extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        waitDialogShow();
+//        waitDialogShow();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        waitDialogDismiss();
+//        waitDialogDismiss();
     }
 }
