@@ -10,7 +10,7 @@ import com.example.luoshuimumu.traveldiary.modle.DB.MediaSqliteHelper;
 import com.example.luoshuimumu.traveldiary.service.LocationService;
 
 /**
- * 主Application，所有百度定位SDK的接口说明请参考线上文档：http://developer.baidu.com/map/loc_refer/index.html
+// * 主Application，所有百度定位SDK的接口说明请参考线上文档：http://developer.baidu.com/map/loc_refer/index.html
  * <p/>
  * 百度定位SDK官方网站：http://developer.baidu.com/map/index.php?title=android-locsdk
  * <p/>

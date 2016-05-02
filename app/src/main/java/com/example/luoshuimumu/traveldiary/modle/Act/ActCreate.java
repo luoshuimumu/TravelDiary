@@ -98,13 +98,13 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_act_create);
-        if(LocationApplication.dbHelper.getWritableDatabase()==null){
-            Toast.makeText(ActCreate.this, "db failed", Toast.LENGTH_SHORT).show();
-        }else{
-
-            Toast.makeText(ActCreate.this, LocationApplication.dbHelper.getWritableDatabase().toString(), Toast.LENGTH_SHORT).show();
-
-        }
+//        if (LocationApplication.dbHelper.getWritableDatabase() == null) {
+//            Toast.makeText(ActCreate.this, "db failed", Toast.LENGTH_SHORT).show();
+//        } else {
+//
+//            Toast.makeText(ActCreate.this, LocationApplication.dbHelper.getWritableDatabase().toString(), Toast.LENGTH_SHORT).show();
+//
+//        }
 
         BDLocationSingleton.create(getApplicationContext());
 
@@ -242,7 +242,7 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
         mFragPic = FragListPic.newInstance(MediaEntity.TYPE_PIC, "");
         mFragAudio = FragListAudio.newInstance(MediaEntity.TYPE_AUDIO, "");
         mFragVideo = FragListVideo.newInstance(MediaEntity.TYPE_VIDEO, "");
-        mFragTrace = FragListTrace.newInstance(MediaEntity.TYPE_VIDEO, "");
+        mFragTrace = FragListTrace.newInstance(MediaEntity.TYPE_TRACE, "");
         mFragList.add(mFragText);
         mFragList.add(mFragPic);
         mFragList.add(mFragAudio);

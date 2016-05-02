@@ -82,7 +82,7 @@ public class FragListPic extends AbsFragxxxList {
                 holder = (Holder) convertView.getTag();
             }
             holder.tv_title.setText(getItem(position).getDate());
-            holder.tv_title.setText(getItem(position).getLocation());
+            holder.tv_content.setText(getItem(position).getLocation());
 
             return convertView;
         }

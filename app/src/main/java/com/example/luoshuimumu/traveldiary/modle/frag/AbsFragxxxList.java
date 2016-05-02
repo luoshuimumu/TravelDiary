@@ -9,11 +9,13 @@ import android.os.Bundle;
 
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.luoshuimumu.traveldiary.LocationApplication;
 import com.example.luoshuimumu.traveldiary.R;
@@ -65,9 +67,9 @@ public abstract class AbsFragxxxList extends Fragment {
      * @param type
      */
     private void initDataList(String type) throws NullPointerException {
-        String SQL_TEST = "select date,location,uri from media;";
-        Cursor cursor_test = LocationApplication.dbHelper.getReadableDatabase()
-                .rawQuery(SQL_TEST, null);
+//        String SQL_TEST = "select date,location,uri from media;";
+//        Cursor cursor_test = LocationApplication.dbHelper.getReadableDatabase()
+//                .rawQuery(SQL_TEST, null);
 
         String SQL = "select date,location,uri from media where type=\"" + type + "\";";
 
@@ -80,15 +82,19 @@ public abstract class AbsFragxxxList extends Fragment {
                 //错误处理
                 return;
             }
-            for (cursor.moveToFirst(); cursor.isAfterLast(); cursor.moveToNext()) {
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
 
                 MediaEntity entity = new MediaEntity();
+//                for (int i = 0; i < cursor.getColumnCount(); i++) {
+//                    Log.e(type, "cursor.getString:" + i + "  " + cursor.getString(i));
+//                }
                 entity.setDate(cursor.getString(cursor.getColumnIndex(MediaEntity.COLUMN_NAME_DATE)));
                 entity.setLocation(cursor.getString(cursor.getColumnIndex(MediaEntity.COLUMN_NAME_LCOATION)));
                 entity.setUri(cursor.getString(cursor.getColumnIndex(MediaEntity.COLUMN_NAME_URI)));
 
                 mDataList.add(entity);
             }
+
             cursor.close();
             LocationApplication.dbHelper.close();
             FLAG_DATA_INIT_COMPLETE = true;
