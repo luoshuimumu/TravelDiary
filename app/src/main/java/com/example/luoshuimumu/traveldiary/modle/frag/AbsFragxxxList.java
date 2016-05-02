@@ -65,6 +65,9 @@ public abstract class AbsFragxxxList extends Fragment {
      * @param type
      */
     private void initDataList(String type) throws NullPointerException {
+        String SQL_TEST = "select date,location,uri from media;";
+        Cursor cursor_test = LocationApplication.dbHelper.getReadableDatabase()
+                .rawQuery(SQL_TEST, null);
 
         String SQL = "select date,location,uri from media where type=\"" + type + "\";";
 
@@ -73,7 +76,11 @@ public abstract class AbsFragxxxList extends Fragment {
         try {
             Cursor cursor = LocationApplication.dbHelper.getReadableDatabase()
                     .rawQuery(SQL, null);
-            while (cursor != null && cursor.getCount() > 0 && !cursor.moveToNext()) {
+            if (cursor == null || cursor.getCount() == 0) {
+                //错误处理
+                return;
+            }
+            for (cursor.moveToFirst(); cursor.isAfterLast(); cursor.moveToNext()) {
 
                 MediaEntity entity = new MediaEntity();
                 entity.setDate(cursor.getString(cursor.getColumnIndex(MediaEntity.COLUMN_NAME_DATE)));
@@ -83,6 +90,7 @@ public abstract class AbsFragxxxList extends Fragment {
                 mDataList.add(entity);
             }
             cursor.close();
+            LocationApplication.dbHelper.close();
             FLAG_DATA_INIT_COMPLETE = true;
         } catch (NullPointerException e) {
             e.printStackTrace();

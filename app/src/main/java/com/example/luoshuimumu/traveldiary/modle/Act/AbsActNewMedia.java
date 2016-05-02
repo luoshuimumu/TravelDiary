@@ -65,7 +65,7 @@ public abstract class AbsActNewMedia extends ActionBarActivity {
     protected void complete(int resultCode) {
         setMediaParams(mTime, mPath);
 
-        mLocation=new BDLocation();
+        mLocation = new BDLocation();
         //判断是否有未赋值的参数
         if (mTime == null || mTime.equals("") || mUri == null || mUri.equals("") || mPath == null || mPath.equals("") || mLocation == null) {
             Toast.makeText(getApplicationContext(), "params less when create new media", Toast.LENGTH_SHORT).show();
@@ -74,7 +74,7 @@ public abstract class AbsActNewMedia extends ActionBarActivity {
 
         Intent intent = new Intent();
         intent.putExtra("time", mTime);
-        intent.putExtra("uri", mUri);
+        intent.putExtra("uri", mUri.toString());
         intent.putExtra("path", mPath);
         //应该还有定位信息
         Bundle bundle = new Bundle();

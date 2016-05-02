@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
 import com.example.luoshuimumu.traveldiary.LocationApplication;
@@ -97,6 +98,14 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_act_create);
+        if(LocationApplication.dbHelper.getWritableDatabase()==null){
+            Toast.makeText(ActCreate.this, "db failed", Toast.LENGTH_SHORT).show();
+        }else{
+
+            Toast.makeText(ActCreate.this, LocationApplication.dbHelper.getWritableDatabase().toString(), Toast.LENGTH_SHORT).show();
+
+        }
+
         BDLocationSingleton.create(getApplicationContext());
 
 //        BDLocationSingleton.setListener(getmBDListener());
@@ -502,11 +511,12 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
 //                "date varchar(255),location varchar(255),uri varchar(255)," +
 //                "path varchar(255));";
 
-        LocationApplication.dbHelper.getReadableDatabase().execSQL(
+        LocationApplication.dbHelper.getWritableDatabase().execSQL(
                 "insert into media (type,date,location,uri,path) values(\"" +
                         type + "\",\"" + time + "\",\"" + locationStr + "\",\""
                         + uri + "\",\"" + path + "\");"
         );
+        LocationApplication.dbHelper.close();
     }
 
     @Override
