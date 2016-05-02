@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.luoshuimumu.traveldiary.modle.Act.pic;
+package com.example.luoshuimumu.traveldiary.modle.Act;
 
 import android.content.Context;
 import android.util.AttributeSet;

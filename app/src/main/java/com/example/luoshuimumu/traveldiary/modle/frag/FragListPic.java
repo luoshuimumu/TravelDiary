@@ -109,7 +109,8 @@ public class FragListPic extends AbsFragxxxList {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_frag_list_pic, container, false);
         listview = (ListView) view.findViewById(R.id.listview);
-        listview.setAdapter(new PicAdapter(getActivity()));
+        mAdapter = new PicAdapter(getActivity());
+        listview.setAdapter(mAdapter);
         return view;
     }
 

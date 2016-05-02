@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.luoshuimumu.traveldiary.modle.Act.pic;
+package com.example.luoshuimumu.traveldiary.modle.Act;
 
 import android.Manifest;
 import android.app.Activity;
@@ -43,6 +43,7 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -249,6 +250,7 @@ public class Camera2BasicFragment extends Fragment
 //            Toast.makeText(getActivity(), " " + uri, Toast.LENGTH_SHORT).show();
 
             mBackgroundHandler.post(new ImageSaver(reader.acquireNextImage(), mFile));
+            onButtonPressed(null);
         }
 
     };
@@ -409,8 +411,33 @@ public class Camera2BasicFragment extends Fragment
         }
     }
 
-    public static Camera2BasicFragment newInstance() {
-        return new Camera2BasicFragment();
+    private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
+
+    private String mParam1;
+    private String mParam2;
+
+    /**
+     * @param path   照片的储存路径
+     * @param param2
+     * @return
+     */
+    public static Camera2BasicFragment newInstance(String path, String param2) {
+        Camera2BasicFragment fragment = new Camera2BasicFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PARAM1, path);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
+        }
     }
 
     @Override
@@ -429,7 +456,13 @@ public class Camera2BasicFragment extends Fragment
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mFile = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
+        createFile();
+
+    }
+
+    private void createFile() {
+        //路径由activity传送
+        mFile = new File(mParam1);
     }
 
     @Override
@@ -456,6 +489,7 @@ public class Camera2BasicFragment extends Fragment
     }
 
     private void requestCameraPermission() {
+        //申请权限遭到拒绝时
         if (FragmentCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
             new ConfirmationDialog().show(getChildFragmentManager(), FRAGMENT_DIALOG);
         } else {
@@ -1004,4 +1038,35 @@ public class Camera2BasicFragment extends Fragment
         }
     }
 
+    private OnFragmentInteractionListener mFragmentInteractionListener;
+
+    //     TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(Uri uri) {
+        if (mFragmentInteractionListener != null) {
+            mFragmentInteractionListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        try {
+            mFragmentInteractionListener = (OnFragmentInteractionListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnFragmentInteractionListener");
+        }
+        super.onAttach(context);
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mFragmentInteractionListener = null;
+    }
+
+
+    public interface OnFragmentInteractionListener {
+        // TODO: Update argument type and name
+        void onFragmentInteraction(Uri uri);
+    }
 }

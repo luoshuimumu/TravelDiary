@@ -66,21 +66,21 @@ public abstract class AbsFragxxxList extends Fragment {
      */
     private void initDataList(String type) throws NullPointerException {
 
-        String SQL = "select date,location,uri from media where type=" + type + ";";
+        String SQL = "select date,location,uri from media where type=\"" + type + "\";";
 
         mDataList = new ArrayList<>();
-        LocationApplication.dbHelper.getReadableDatabase().execSQL(SQL);
+//        LocationApplication.dbHelper.getReadableDatabase().execSQL(SQL);
         try {
             Cursor cursor = LocationApplication.dbHelper.getReadableDatabase()
                     .rawQuery(SQL, null);
-            while (cursor != null&&cursor.getCount()!=0) {
+            while (cursor != null && cursor.getCount() > 0 && !cursor.moveToNext()) {
+
                 MediaEntity entity = new MediaEntity();
-                entity.setDate(cursor.getString(0));
-                entity.setLocation(cursor.getString(1));
-                entity.setUri(cursor.getString(2));
+                entity.setDate(cursor.getString(cursor.getColumnIndex(MediaEntity.COLUMN_NAME_DATE)));
+                entity.setLocation(cursor.getString(cursor.getColumnIndex(MediaEntity.COLUMN_NAME_LCOATION)));
+                entity.setUri(cursor.getString(cursor.getColumnIndex(MediaEntity.COLUMN_NAME_URI)));
 
                 mDataList.add(entity);
-                cursor.moveToNext();
             }
             cursor.close();
             FLAG_DATA_INIT_COMPLETE = true;

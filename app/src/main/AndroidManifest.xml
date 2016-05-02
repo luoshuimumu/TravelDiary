@@ -25,6 +25,7 @@
     <application
         android:name=".LocationApplication"
         android:allowBackup="true"
+        android:debuggable="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -106,7 +107,7 @@
             android:label="@string/title_activity_act_new_trace" />
         <activity android:name=".test.ActTestViewPager" />
         <activity
-            android:name=".modle.Act.pic.CameraActivity"
+            android:name=".modle.Act.CameraActivity"
             android:label="@string/app_name" />
     </application>
 

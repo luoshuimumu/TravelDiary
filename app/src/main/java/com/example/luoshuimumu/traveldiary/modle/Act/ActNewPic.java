@@ -21,7 +21,7 @@ public class ActNewPic extends AbsActNewMedia {
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);
-        getImageFromCamera();
+//        getImageFromCamera();
 
 
     }
@@ -40,29 +40,11 @@ public class ActNewPic extends AbsActNewMedia {
         }
     }
 
-    private void getImageFromCamera() {
-        String state = Environment.getExternalStorageState();
-        if (state.equals(Environment.MEDIA_MOUNTED)) {
-            Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-            //生成文件储存路径
-            String outputPath = Constant.DEFAULT_IMAGE_PATH;
-            File dir = new File(outputPath);
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-            //获取时间生成完整路径
-
-            mTime = TimeUtils.getTime();
-            mPath = outputPath + "/img" + mTime + ".jpg";
-            mUri = Uri.fromFile(new File(mPath));
-
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri);
-            intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
-            startActivityForResult(intent, REQUEST_CODE_CAPTURE_CAMERA);
-
-        } else {
-            Toast.makeText(getApplicationContext(), "please ensure sdCard exists!", Toast.LENGTH_SHORT).show();
-        }
+    private void initPicPath() {
+        String outputPath = ActNewPic.this.getExternalFilesDir(null).toString();
+        mTime = TimeUtils.getTime();
+        mPath = outputPath + "/img/" + mTime + ".jpg";
+        mUri = Uri.parse(mPath);
 
 
     }

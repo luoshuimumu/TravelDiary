@@ -14,23 +14,38 @@
  * limitations under the License.
  */
 
-package com.example.luoshuimumu.traveldiary.modle.Act.pic;
+package com.example.luoshuimumu.traveldiary.modle.Act;
 
-import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.example.luoshuimumu.traveldiary.R;
+import com.example.luoshuimumu.traveldiary.utils.TimeUtils;
 
 
-public class CameraActivity extends Activity {
+public class CameraActivity extends AbsActNewMedia implements Camera2BasicFragment.OnFragmentInteractionListener {
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        //保存到数据库
+        complete(ActCreate.RESULT_CODE_NEW_PIC);
+    }
+
+    private void initPicPath() {
+        String outputPath = CameraActivity.this.getExternalFilesDir(null).toString();
+        mTime = TimeUtils.getTime();
+        mPath = outputPath + "/img" + mTime + ".jpg";
+        mUri = Uri.parse(mPath);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initPicPath();
         setContentView(R.layout.activity_camera);
         if (null == savedInstanceState) {
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container, Camera2BasicFragment.newInstance())
+                    .replace(R.id.container, Camera2BasicFragment.newInstance(mPath, ""))
                     .commit();
         }
     }

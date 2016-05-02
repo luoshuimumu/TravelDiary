@@ -21,7 +21,6 @@ import android.widget.TextView;
 import com.baidu.location.BDLocation;
 import com.example.luoshuimumu.traveldiary.LocationApplication;
 import com.example.luoshuimumu.traveldiary.R;
-import com.example.luoshuimumu.traveldiary.modle.Act.pic.CameraActivity;
 import com.example.luoshuimumu.traveldiary.modle.DB.MediaEntity;
 import com.example.luoshuimumu.traveldiary.modle.Map.BDLocationSingleton;
 import com.example.luoshuimumu.traveldiary.modle.frag.AbsFragxxxList;
@@ -41,13 +40,13 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
 
     }
 
-    protected static final int REQUEST_CODE_NEW_MEDIA = 1990;
+    public static final int REQUEST_CODE_NEW_MEDIA = 1990;
 
-    protected static final int RESULT_CODE_NEW_PIC = 1993;
-    protected static final int RESULT_CODE_NEW_TEXT = 1994;
-    protected static final int RESULT_CODE_NEW_AUDIO = 1995;
-    protected static final int RESULT_CODE_NEW_VIDEO = 1996;
-    protected static final int RESULT_CODE_NEW_TRACE = 1997;
+    public static final int RESULT_CODE_NEW_PIC = 1993;
+    public static final int RESULT_CODE_NEW_TEXT = 1994;
+    public static final int RESULT_CODE_NEW_AUDIO = 1995;
+    public static final int RESULT_CODE_NEW_VIDEO = 1996;
+    public static final int RESULT_CODE_NEW_TRACE = 1997;
 
 
     //数据库单例
@@ -230,11 +229,11 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
 
     private void initViewPager() {
         mFragList = new ArrayList<>();
-        mFragText = FragListText.newInstance(MediaEntity.COLUMN_NAME_TYPE, "");
-        mFragPic = FragListPic.newInstance(MediaEntity.COLUMN_NAME_TYPE, "");
-        mFragAudio = FragListAudio.newInstance(MediaEntity.COLUMN_NAME_TYPE, "");
-        mFragVideo = FragListVideo.newInstance(MediaEntity.COLUMN_NAME_TYPE, "");
-        mFragTrace = FragListTrace.newInstance(MediaEntity.COLUMN_NAME_TYPE, "");
+        mFragText = FragListText.newInstance(MediaEntity.TYPE_TEXT, "");
+        mFragPic = FragListPic.newInstance(MediaEntity.TYPE_PIC, "");
+        mFragAudio = FragListAudio.newInstance(MediaEntity.TYPE_AUDIO, "");
+        mFragVideo = FragListVideo.newInstance(MediaEntity.TYPE_VIDEO, "");
+        mFragTrace = FragListTrace.newInstance(MediaEntity.TYPE_VIDEO, "");
         mFragList.add(mFragText);
         mFragList.add(mFragPic);
         mFragList.add(mFragAudio);
@@ -243,7 +242,7 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
 
         mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mFragList);
         mViewPager.setAdapter(mPagerAdapter);
-        setTabSelection(0);
+        setTabSelection(1);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -391,31 +390,31 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
      * @return 是否插入成功的标记(未使用)
      */
     private boolean insertPic(Intent data) {
-        data.putExtra("type", "img");
+        data.putExtra("type", MediaEntity.TYPE_PIC);
         insertData(data);
         return true;
     }
 
     private boolean insertText(Intent data) {
-        data.putExtra("type", "text");
+        data.putExtra("type", MediaEntity.TYPE_TEXT);
         insertData(data);
         return true;
     }
 
     private boolean insertAudio(Intent data) {
-        data.putExtra("type", "audio");
+        data.putExtra("type", MediaEntity.TYPE_AUDIO);
         insertData(data);
         return true;
     }
 
     private boolean insertVideo(Intent data) {
-        data.putExtra("type", "video");
+        data.putExtra("type", MediaEntity.TYPE_VIDEO);
         insertData(data);
         return true;
     }
 
     private boolean insertTrace(Intent data) {
-        data.putExtra("type", "trace");
+        data.putExtra("type", MediaEntity.TYPE_TRACE);
         insertData(data);
         return true;
     }
@@ -490,7 +489,12 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
         String time = intent.getStringExtra("time");
         String uri = intent.getStringExtra("uri");
         String path = intent.getStringExtra("path");
+        //这里有可能Location是空值
         BDLocation location = intent.getParcelableExtra("location");
+        String locationStr = "null";
+        if (location.getPoiList() != null) {
+            locationStr = location.getPoiList().get(0).toString();
+        }
 
         //插入语句
 //        create table " + "media" + " (_id integer" +
@@ -499,9 +503,9 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
 //                "path varchar(255));";
 
         LocationApplication.dbHelper.getReadableDatabase().execSQL(
-                "insert into media (type,date,location,uri,path) values(" +
-                        type + "," + time + "," + location.getPoiList().get(0) + ","
-                        + uri + "," + path + ");"
+                "insert into media (type,date,location,uri,path) values(\"" +
+                        type + "\",\"" + time + "\",\"" + locationStr + "\",\""
+                        + uri + "\",\"" + path + "\");"
         );
     }
 
