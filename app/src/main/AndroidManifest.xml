@@ -78,7 +78,8 @@
             android:label="@string/title_activity_test_file"></activity>
         <activity
             android:name=".model.ActCreate"
-            android:label="@string/title_activity_act_create">
+            android:label="@string/title_activity_act_create"
+            android:theme="@style/Theme.AppCompat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

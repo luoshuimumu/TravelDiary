@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -57,17 +60,18 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
 //    BDLocationListener mBDListener = null;
 
     //内置五个fragment 分别展示不同类型媒体信息的列表
-    private ViewPager mViewPager;
+    ViewPager mViewPager;
+    ViewPagerAdapter mPagerAdapter;
     ArrayList<AbsFragxxxList> mFragList;
 
     //怎么初始化
     //初始化需要从数据库加载数据
 
-    private AbsFragxxxList mFragText;
-    private AbsFragxxxList mFragPic;
-    private AbsFragxxxList mFragAudio;
-    private AbsFragxxxList mFragVideo;
-    private AbsFragxxxList mFragTrace;
+    AbsFragxxxList mFragText;
+    AbsFragxxxList mFragPic;
+    AbsFragxxxList mFragAudio;
+    AbsFragxxxList mFragVideo;
+    AbsFragxxxList mFragTrace;
 
     //五个切换按钮 五个切换图片 在切换到不同fragment时切换
     private ImageView iv_frag_text;
@@ -76,17 +80,17 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
     private ImageView iv_frag_video;
     private ImageView iv_frag_trace;
 
-    private TextView tv_frag_text;
-    private TextView tv_frag_audio;
-    private TextView tv_frag_pic;
-    private TextView tv_frag_video;
-    private TextView tv_frag_trace;
+    TextView tv_frag_text;
+    TextView tv_frag_audio;
+    TextView tv_frag_pic;
+    TextView tv_frag_video;
+    TextView tv_frag_trace;
 
-    private LinearLayout ll_frag_text;
-    private LinearLayout ll_frag_pic;
-    private LinearLayout ll_frag_audio;
-    private LinearLayout ll_frag_video;
-    private LinearLayout ll_frag_trace;
+    LinearLayout ll_frag_text;
+    LinearLayout ll_frag_pic;
+    LinearLayout ll_frag_audio;
+    LinearLayout ll_frag_video;
+    LinearLayout ll_frag_trace;
 
 
     @Override
@@ -180,7 +184,7 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
     /**
      * 只用于改变 frag切换按钮的图片和颜色
      *
-     * @param index
+     * @param index 不同fragment的编号
      */
     private void setTabSelection(int index) {
         clearTabSelection();
@@ -224,7 +228,7 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
      */
 
     private void initViewPager() {
-        mFragList = new ArrayList<AbsFragxxxList>();
+        mFragList = new ArrayList<>();
         mFragText = FragListText.newInstance(MediaEntity.COLUMN_NAME_TYPE, "");
         mFragPic = FragListPic.newInstance(MediaEntity.COLUMN_NAME_TYPE, "");
         mFragAudio = FragListAudio.newInstance(MediaEntity.COLUMN_NAME_TYPE, "");
@@ -236,7 +240,8 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
         mFragList.add(mFragVideo);
         mFragList.add(mFragTrace);
 
-        mViewPager.setAdapter(new ViewPagerAdapter(getSupportFragmentManager(), mFragList));
+        mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mFragList);
+        mViewPager.setAdapter(mPagerAdapter);
         setTabSelection(0);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -310,8 +315,8 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
     /**
      * 主要响应“新建媒体”事件的回调
      *
-     * @param requestCode
-     * @param resultCode
+     * @param requestCode 本类常量
+     * @param resultCode  本类常量
      * @param data        选取几个关键入库参数 date path name等 还有识别媒体类型的标记
      */
     @Override
@@ -338,6 +343,7 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
                 default:
                     break;
             }
+            //更新列表 每个列表在不同的fragment中 应该指定更新其中一个fragment
             refreshUI();
         }
 
@@ -379,7 +385,7 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
      * 加上type
      * path就是title 可以不用再存一次title
      *
-     * @return
+     * @return 是否插入成功的标记(未使用)
      */
     private boolean insertPic(Intent data) {
         data.putExtra("type", "img");
@@ -415,6 +421,7 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
      * 刷新方法 应查询数据库 更新listview的数据
      */
     private void refreshUI() {
+        if (mPagerAdapter != null) mPagerAdapter.notifyDataSetChanged();
 
     }
 
@@ -493,6 +500,24 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
                         type + "," + time + "," + location.getPoiList().get(0) + ","
                         + uri + "," + path + ");"
         );
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_new_media:
+                onNewMediaClick();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     /**
