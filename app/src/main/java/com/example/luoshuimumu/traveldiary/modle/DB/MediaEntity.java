@@ -1,4 +1,4 @@
-package com.example.luoshuimumu.traveldiary.model.DB;
+package com.example.luoshuimumu.traveldiary.modle.DB;
 
 import android.database.sqlite.SQLiteDatabase;
 

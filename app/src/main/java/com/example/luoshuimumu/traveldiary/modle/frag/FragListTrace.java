@@ -1,7 +1,6 @@
-package com.example.luoshuimumu.traveldiary.model.frag;
+package com.example.luoshuimumu.traveldiary.modle.frag;
 
 import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -13,12 +12,12 @@ import com.example.luoshuimumu.traveldiary.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FragListVideo.OnFragmentInteractionListener} interface
+ * {@link FragListTrace.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FragListVideo#newInstance} factory method to
+ * Use the {@link FragListTrace#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragListVideo extends AbsFragxxxList {
+public class FragListTrace extends AbsFragxxxList {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,11 +35,11 @@ public class FragListVideo extends AbsFragxxxList {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FragListVideo.
+     * @return A new instance of fragment FragListTrace.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragListVideo newInstance(String param1, String param2) {
-        FragListVideo fragment = new FragListVideo();
+    public static FragListTrace newInstance(String param1, String param2) {
+        FragListTrace fragment = new FragListTrace();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -48,7 +47,7 @@ public class FragListVideo extends AbsFragxxxList {
         return fragment;
     }
 
-    public FragListVideo() {
+    public FragListTrace() {
         // Required empty public constructor
     }
 
@@ -65,7 +64,7 @@ public class FragListVideo extends AbsFragxxxList {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_frag_list_video, container, false);
+        return inflater.inflate(R.layout.fragment_frag_list_trace, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

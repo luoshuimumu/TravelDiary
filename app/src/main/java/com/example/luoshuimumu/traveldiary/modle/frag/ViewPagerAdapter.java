@@ -1,4 +1,4 @@
-package com.example.luoshuimumu.traveldiary.model.frag;
+package com.example.luoshuimumu.traveldiary.modle.frag;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

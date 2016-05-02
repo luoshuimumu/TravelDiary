@@ -6,7 +6,7 @@ import android.app.Service;
 import android.os.Vibrator;
 
 import com.baidu.mapapi.SDKInitializer;
-import com.example.luoshuimumu.traveldiary.model.DB.MediaSqliteHelper;
+import com.example.luoshuimumu.traveldiary.modle.DB.MediaSqliteHelper;
 import com.example.luoshuimumu.traveldiary.service.LocationService;
 
 /**

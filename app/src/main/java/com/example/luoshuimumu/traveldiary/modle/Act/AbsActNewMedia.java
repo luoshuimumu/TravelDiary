@@ -1,4 +1,4 @@
-package com.example.luoshuimumu.traveldiary.model;
+package com.example.luoshuimumu.traveldiary.modle.Act;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -8,9 +8,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
 import com.example.luoshuimumu.traveldiary.R;
-import com.example.luoshuimumu.traveldiary.model.Map.BDLocationSingleton;
+import com.example.luoshuimumu.traveldiary.modle.Map.BDLocationSingleton;
 
 import java.io.File;
 

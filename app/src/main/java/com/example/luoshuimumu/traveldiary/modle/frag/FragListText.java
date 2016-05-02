@@ -1,4 +1,4 @@
-package com.example.luoshuimumu.traveldiary.model.frag;
+package com.example.luoshuimumu.traveldiary.modle.frag;
 
 import android.app.Activity;
 import android.net.Uri;
@@ -13,12 +13,12 @@ import com.example.luoshuimumu.traveldiary.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FragListTrace.OnFragmentInteractionListener} interface
+ * {@link FragListText.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FragListTrace#newInstance} factory method to
+ * Use the {@link FragListText#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragListTrace extends AbsFragxxxList {
+public class FragListText extends AbsFragxxxList {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,11 +36,11 @@ public class FragListTrace extends AbsFragxxxList {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FragListTrace.
+     * @return A new instance of fragment FragListText.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragListTrace newInstance(String param1, String param2) {
-        FragListTrace fragment = new FragListTrace();
+    public static FragListText newInstance(String param1, String param2) {
+        FragListText fragment = new FragListText();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -48,7 +48,7 @@ public class FragListTrace extends AbsFragxxxList {
         return fragment;
     }
 
-    public FragListTrace() {
+    public FragListText() {
         // Required empty public constructor
     }
 
@@ -65,15 +65,15 @@ public class FragListTrace extends AbsFragxxxList {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_frag_list_trace, container, false);
+        return inflater.inflate(R.layout.fragment_frag_llist_text, container, false);
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-//    public void onButtonPressed(Uri uri) {
-//        if (mListener != null) {
-//            mListener.onFragmentInteraction(uri);
-//        }
-//    }
+    public void onButtonPressed(Uri uri, String type) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(uri, type);
+        }
+    }
 
     @Override
     public void onAttach(Activity activity) {

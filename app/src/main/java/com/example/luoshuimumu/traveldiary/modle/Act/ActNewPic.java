@@ -1,4 +1,4 @@
-package com.example.luoshuimumu.traveldiary.model;
+package com.example.luoshuimumu.traveldiary.modle.Act;
 
 
 import android.content.Intent;
@@ -68,72 +68,3 @@ public class ActNewPic extends AbsActNewMedia {
     }
 
 }
-//    int screenHight, screenWidth;
-//    SurfaceView surfaceView;
-//    SurfaceHolder holder;
-//    boolean isPreview;
-//    Camera camera;
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        setContentView(R.layout.activity_act_new_pic);
-//
-//        WindowManager wm = getWindowManager();
-//        Display display = wm.getDefaultDisplay();
-//        DisplayMetrics metris = new DisplayMetrics();
-//        //获取屏幕尺寸
-//        display.getMetrics(metris);
-//        screenHight = metris.heightPixels;
-//        screenWidth = metris.widthPixels;
-//
-//        //获取界面surface组件
-//        surfaceView = (SurfaceView) findViewById(R.id.surfaveView);
-//        //设置surfaceView不需要自己维护缓冲区
-//        holder = surfaceView.getHolder();
-//        //添加回调
-//        holder.addCallback(new SurfaceHolder.Callback() {
-//            @Override
-//            public void surfaceCreated(SurfaceHolder surfaceHolder) {
-//                Toast.makeText(ActNewPic.this, "open camera", Toast.LENGTH_SHORT).show();
-//                initCamera();
-//            }
-//
-//            @Override
-//            public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-//
-//            }
-//        });
-//
-//
-//    }
-//
-//    private void initCamera() {
-//        //默认打开后置摄像头
-//        if (!isPreview) {
-//            camera = Camera.open(0);
-//            camera.setDisplayOrientation(90);
-//        }
-//        if (camera != null && !isPreview) {
-//            try {
-//
-//
-//
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//
-//            }
-//        }
-//
-//
-//    }
-//
-//}

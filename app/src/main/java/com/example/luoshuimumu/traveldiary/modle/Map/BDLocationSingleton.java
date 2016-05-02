@@ -1,4 +1,4 @@
-package com.example.luoshuimumu.traveldiary.model.Map;
+package com.example.luoshuimumu.traveldiary.modle.Map;
 
 import android.content.Context;
 

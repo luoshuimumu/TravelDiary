@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.luoshuimumu.traveldiary.model.frag.FragListPic">
+    tools:context="com.example.luoshuimumu.traveldiary.modle.frag.FragListPic">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

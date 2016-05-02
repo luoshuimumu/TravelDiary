@@ -1,4 +1,4 @@
-package com.example.luoshuimumu.traveldiary.model;
+package com.example.luoshuimumu.traveldiary.modle.Act;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -21,15 +21,16 @@ import android.widget.TextView;
 import com.baidu.location.BDLocation;
 import com.example.luoshuimumu.traveldiary.LocationApplication;
 import com.example.luoshuimumu.traveldiary.R;
-import com.example.luoshuimumu.traveldiary.model.DB.MediaEntity;
-import com.example.luoshuimumu.traveldiary.model.Map.BDLocationSingleton;
-import com.example.luoshuimumu.traveldiary.model.frag.AbsFragxxxList;
-import com.example.luoshuimumu.traveldiary.model.frag.FragListAudio;
-import com.example.luoshuimumu.traveldiary.model.frag.FragListPic;
-import com.example.luoshuimumu.traveldiary.model.frag.FragListText;
-import com.example.luoshuimumu.traveldiary.model.frag.FragListTrace;
-import com.example.luoshuimumu.traveldiary.model.frag.FragListVideo;
-import com.example.luoshuimumu.traveldiary.model.frag.ViewPagerAdapter;
+import com.example.luoshuimumu.traveldiary.modle.Act.pic.CameraActivity;
+import com.example.luoshuimumu.traveldiary.modle.DB.MediaEntity;
+import com.example.luoshuimumu.traveldiary.modle.Map.BDLocationSingleton;
+import com.example.luoshuimumu.traveldiary.modle.frag.AbsFragxxxList;
+import com.example.luoshuimumu.traveldiary.modle.frag.FragListAudio;
+import com.example.luoshuimumu.traveldiary.modle.frag.FragListPic;
+import com.example.luoshuimumu.traveldiary.modle.frag.FragListText;
+import com.example.luoshuimumu.traveldiary.modle.frag.FragListTrace;
+import com.example.luoshuimumu.traveldiary.modle.frag.FragListVideo;
+import com.example.luoshuimumu.traveldiary.modle.frag.ViewPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -351,7 +352,9 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
     }
 
     private void onNewPicClicked() {
-        Intent i = new Intent(ActCreate.this, ActNewPic.class);
+
+        Intent i = new Intent(ActCreate.this, CameraActivity.class);
+//        Intent i = new Intent(ActCreate.this, ActNewPic.class);
         Bundle bundle = new Bundle();
         startActivityForResult(i, REQUEST_CODE_NEW_MEDIA, bundle);
     }

@@ -1,4 +1,4 @@
-package com.example.luoshuimumu.traveldiary.model.frag;
+package com.example.luoshuimumu.traveldiary.modle.frag;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -9,7 +9,6 @@ import android.os.Bundle;
 
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,7 @@ import android.widget.ListView;
 
 import com.example.luoshuimumu.traveldiary.LocationApplication;
 import com.example.luoshuimumu.traveldiary.R;
-import com.example.luoshuimumu.traveldiary.model.DB.MediaEntity;
+import com.example.luoshuimumu.traveldiary.modle.DB.MediaEntity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,12 +1,8 @@
-package com.example.luoshuimumu.traveldiary.model.DB;
+package com.example.luoshuimumu.traveldiary.modle.DB;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.net.Uri;
-
-import com.baidu.location.BDLocation;
 
 /**
  * Created by luoshuimumu on 2016/4/13.

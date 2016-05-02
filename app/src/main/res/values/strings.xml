@@ -6,7 +6,7 @@
     <string name="title_activity_ac_list_view">AcListView</string>
     <string-array name="books">
         <item>英汉大词典</item>
-        <item >口袋妖怪百科</item>
+        <item>口袋妖怪百科</item>
         <item>war3攻略</item>
         <item>高等数学</item>
     </string-array>
@@ -20,7 +20,7 @@
     <string name="title_activity_test_file">TestFile</string>
     <string name="title_activity_act_create">ActCreate</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_act_new_pic">ActNewPic</string>
     <string name="title_activity_act_new_text">ActNewText</string>
@@ -28,4 +28,9 @@
     <string name="title_activity_act_new_video">ActNewVideo</string>
     <string name="title_activity_act_new_trace">ActNewTrace</string>
     <string name="title_activity_abs_act_new_media">AbsActNewMedia</string>
+    <!-- pic model-->
+    <string name="picture">Picture</string>
+    <string name="description_info">Info</string>
+    <string name="request_permission">This sample needs camera permission.</string>
+    <string name="camera_error">This device doesn\'t support Camera2 API.</string>
 </resources>
