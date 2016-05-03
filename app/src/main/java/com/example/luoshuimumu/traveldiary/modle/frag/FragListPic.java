@@ -24,19 +24,10 @@ import com.example.luoshuimumu.traveldiary.modle.DB.MediaEntity;
  * create an instance of this fragment.
  */
 public class FragListPic extends AbsFragxxxList {
-    ListView listview;
+    ListView mListView;
 
     private OnFragmentInteractionListener mListener;
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragListPic.
-     */
-    // TODO: Rename and change types and number of parameters
     public static FragListPic newInstance(String param1, String param2) {
         FragListPic fragment = new FragListPic();
         Bundle args = new Bundle();
@@ -53,7 +44,6 @@ public class FragListPic extends AbsFragxxxList {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //数据初始化已完成 直接加载进listview
     }
 
     private class PicAdapter extends BaseAdapter {
@@ -108,9 +98,9 @@ public class FragListPic extends AbsFragxxxList {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_frag_list_pic, container, false);
-        listview = (ListView) view.findViewById(R.id.listview);
+        mListView = (ListView) view.findViewById(R.id.listview);
         mAdapter = new PicAdapter(getActivity());
-        listview.setAdapter(mAdapter);
+        mListView.setAdapter(mAdapter);
         return view;
     }
 

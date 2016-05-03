@@ -38,6 +38,7 @@ import java.util.List;
 public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFragmentInteractionListener {
     @Override
     public void onFragmentInteraction(Uri uri, String type) {
+        //更新fragment列表数据
 
     }
 
@@ -232,7 +233,7 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
 
     /**
      * 需要设置fragmentList和viewPager的关系
-     * <p/>
+     * <p>
      * 这里初始化frag
      */
 

@@ -38,7 +38,7 @@ public abstract class AbsFragxxxList extends Fragment {
     private Dialog mWaitDialog;
 
     //通用控件
-    ListView mListView;
+//    ListView mListView;
     //通用适配器
     BaseAdapter mAdapter;
     //通用数据项
