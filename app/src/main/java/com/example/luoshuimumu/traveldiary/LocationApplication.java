@@ -10,11 +10,11 @@ import com.example.luoshuimumu.traveldiary.modle.DB.MediaSqliteHelper;
 import com.example.luoshuimumu.traveldiary.service.LocationService;
 
 /**
-// * Ö÷Application£¬ËùÓĞ°Ù¶È¶¨Î»SDKµÄ½Ó¿ÚËµÃ÷Çë²Î¿¼ÏßÉÏÎÄµµ£ºhttp://developer.baidu.com/map/loc_refer/index.html
- * <p/>
- * °Ù¶È¶¨Î»SDK¹Ù·½ÍøÕ¾£ºhttp://developer.baidu.com/map/index.php?title=android-locsdk
- * <p/>
- * Ö±½Ó¿½±´com.baidu.location.service°üµ½×Ô¼ºµÄ¹¤³ÌÏÂ£¬¼òµ¥ÅäÖÃ¼´¿É»ñÈ¡¶¨Î»½á¹û£¬Ò²¿ÉÒÔ¸ù¾İdemoÄÚÈİ×ÔĞĞ·â×°
+ * // * ä¸»Applicationï¼Œæ‰€æœ‰ç™¾åº¦å®šä½SDKçš„æ¥å£è¯´æ˜è¯·å‚è€ƒçº¿ä¸Šæ–‡æ¡£ï¼šhttp://developer.baidu.com/map/loc_refer/index.html
+ * <p>
+ * ç™¾åº¦å®šä½SDKå®˜æ–¹ç½‘ç«™ï¼šhttp://developer.baidu.com/map/index.php?title=android-locsdk
+ * <p>
+ * ç›´æ¥æ‹·è´com.baidu.location.serviceåŒ…åˆ°è‡ªå·±çš„å·¥ç¨‹ä¸‹ï¼Œç®€å•é…ç½®å³å¯è·å–å®šä½ç»“æœï¼Œä¹Ÿå¯ä»¥æ ¹æ®demoå†…å®¹è‡ªè¡Œå°è£…
  */
 public class LocationApplication extends Application {
     public LocationService locationService;
@@ -34,7 +34,7 @@ public class LocationApplication extends Application {
     public void onCreate() {
         super.onCreate();
         /***
-         * ³õÊ¼»¯¶¨Î»sdk£¬½¨ÒéÔÚApplicationÖĞ´´½¨
+         * åˆå§‹åŒ–å®šä½sdkï¼Œå»ºè®®åœ¨Applicationä¸­åˆ›å»º
          */
         locationService = new LocationService(getApplicationContext());
         mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);

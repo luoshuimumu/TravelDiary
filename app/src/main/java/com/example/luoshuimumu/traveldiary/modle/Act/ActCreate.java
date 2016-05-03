@@ -502,7 +502,7 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
         BDLocation location = intent.getParcelableExtra("location");
         String locationStr = "null";
         if (location.getPoiList() != null) {
-            locationStr = location.getPoiList().get(0).toString();
+            locationStr = location.getPoiList().get(0).getName();
         }
 
         //插入语句

@@ -26,7 +26,7 @@ import java.util.LinkedList;
 
 /**
  * 此类一旦打开即开始定位及绘制服务
- * <p/>
+ * <p>
  * 需要增加一个定时器 定时停止该服务
  */
 public class ActNewTrace extends ActionBarActivity {
@@ -64,7 +64,7 @@ public class ActNewTrace extends ActionBarActivity {
         @Override
         public void onReceiveLocation(BDLocation bdLocation) {
             if (bdLocation != null && (bdLocation.getLocType() == 161 || bdLocation.getLocType() == 66)) {
-                Message locMsg = null;
+                Message locMsg = new Message();
                 Bundle locData;
                 locData = Algorithm(bdLocation);
                 //一定保存数据 但不一定绘图
@@ -83,6 +83,7 @@ public class ActNewTrace extends ActionBarActivity {
     /**
      * 调用数据库模块插入数据
      * 先存在内存中 没达到五十个点向文件写入数据 在该类完成后向sqlite插入一条数据 标记位置
+     *
      * @param location
      */
     private void insertTraceData(BDLocation location) {
@@ -113,7 +114,7 @@ public class ActNewTrace extends ActionBarActivity {
 
                     //如果当前地图在显示，则构建MarkerOption，用于在地图上添加Marker
                     if (mMapView.isFocused()) {
-                        OverlayOptions option = new MarkerOptions().position(point);
+                        OverlayOptions option = new MarkerOptions().position(point).icon(bitmap);
                         mBaiduMap.addOverlay(option);
                         mBaiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(point));
 

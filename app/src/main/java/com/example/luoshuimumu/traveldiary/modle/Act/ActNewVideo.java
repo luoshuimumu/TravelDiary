@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.SurfaceHolder;
@@ -17,6 +18,7 @@ import com.example.luoshuimumu.traveldiary.R;
 import com.example.luoshuimumu.traveldiary.constant.Constant;
 import com.example.luoshuimumu.traveldiary.utils.TimeUtils;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -51,11 +53,13 @@ public class ActNewVideo extends AbsActNewMedia implements View.OnClickListener 
         btn_save.setOnClickListener(this);
         btn_pause.setOnClickListener(this);
 
+        //播放模块
+        initPlayModel();
         //录制模块
         initRecordModel();
 
-        //播放模块
-        initPlayModel();
+
+        initVideoPath();
     }
 
     @Override
@@ -71,7 +75,8 @@ public class ActNewVideo extends AbsActNewMedia implements View.OnClickListener 
                     break;
                 }
                 case R.id.act_video_btn_play: {
-                    playVideo();//可能抛异常
+//                    果然有错...
+//                    playVideo();//可能抛异常
                     break;
                 }
                 case R.id.act_video_btn_save: {
@@ -79,7 +84,7 @@ public class ActNewVideo extends AbsActNewMedia implements View.OnClickListener 
                     break;
                 }
                 case R.id.act_video_btn_pause: {
-                    pauseVideo();
+//                    pauseVideo();
                     break;
                 }
                 default:
@@ -90,10 +95,16 @@ public class ActNewVideo extends AbsActNewMedia implements View.OnClickListener 
         }
     }
 
+    private void initVideoPath() {
+        String outputPath = ActNewVideo.this.getExternalFilesDir(null).toString();
+        mTime = TimeUtils.getTime();
+        mPath = outputPath + "/video" + mTime + ".mp4";
+        mUri = Uri.parse(mPath);
+    }
+
     private void record() {
         try {
-            mTime = TimeUtils.getTime();
-            mPath = Constant.DEFAULT_VIDEO_PATH + "/video" + mTime + ".mp4";
+            new File(mPath);
             mRecorder = new MediaRecorder();
             mRecorder.reset();
 
@@ -103,9 +114,11 @@ public class ActNewVideo extends AbsActNewMedia implements View.OnClickListener 
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
             mRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.MPEG_4_SP);
-            mRecorder.setVideoSize(320, 280);
+            //  尝试解决         start failed: -19
+//            mRecorder.setVideoSize(320, 280);
             //每秒4帧
-            mRecorder.setVideoFrameRate(4);
+
+//  mRecorder.setVideoFrameRate(4);
             //设置输出路径
             mRecorder.setOutputFile(mPath);
             //使用surfaceView预览视频
@@ -147,6 +160,7 @@ public class ActNewVideo extends AbsActNewMedia implements View.OnClickListener 
         mPlayView = (SurfaceView) findViewById(R.id.act_video_surfaceView_play);
         mPlayView.getHolder().setKeepScreenOn(true);
         mPlayView.getHolder().addCallback(new PlaySurfaceListener());
+
     }
 
     private class PlaySurfaceListener implements SurfaceHolder.Callback {
@@ -175,7 +189,9 @@ public class ActNewVideo extends AbsActNewMedia implements View.OnClickListener 
     }
 
     private void playVideo() throws IOException {
-        mPlayer.reset();
+        mRecordView.setVisibility(View.INVISIBLE);
+        mPlayer = new MediaPlayer();
+//        mPlayer.reset();
         mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         //设置需要播放的视频
         mPlayer.setDataSource(mPath);
@@ -203,7 +219,7 @@ public class ActNewVideo extends AbsActNewMedia implements View.OnClickListener 
 
     @Override
     protected void onPause() {
-        if (mPlayer.isPlaying()) {
+        if (mPlayer != null && mPlayer.isPlaying()) {
             playPosition = mPlayer.getCurrentPosition();
             mPlayer.stop();
         }
@@ -212,11 +228,12 @@ public class ActNewVideo extends AbsActNewMedia implements View.OnClickListener 
 
     @Override
     protected void onDestroy() {
-        if (mPlayer.isPlaying()) {
+        if (mPlayer != null && mPlayer.isPlaying()) {
             mPlayer.stop();
+            mPlayer.release();
         }
-        mRecorder.release();
-        mPlayer.release();
+//        mRecorder.release();
+
 
         super.onDestroy();
     }

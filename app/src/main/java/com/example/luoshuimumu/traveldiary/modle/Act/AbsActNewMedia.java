@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
@@ -27,11 +28,13 @@ public abstract class AbsActNewMedia extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_abs_act_new_media2);
+
         getPosition();
     }
 
 
     private void getPosition() {
+        BDLocationSingleton.startPosition();
         //开一个异步任务
         new AsyncGetPositonTask().execute();
 
@@ -42,11 +45,12 @@ public abstract class AbsActNewMedia extends ActionBarActivity {
         protected String doInBackground(String... strings) {
             try {
                 //若地图单例处于未完成的状态
-                while (false == BDLocationSingleton.isFlagComplete()) {
+                while (!BDLocationSingleton.isFlagComplete()) {
                     Thread.sleep(500);
                 }
                 //获取当前位置
                 mLocation = BDLocationSingleton.getPosition();
+                Log.e("position", mLocation.toString());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -82,6 +86,6 @@ public abstract class AbsActNewMedia extends ActionBarActivity {
         bundle.putParcelable("location", mLocation);
         intent.putExtras(bundle);
         setResult(resultCode, intent);
-        finishActivity(ActCreate.REQUEST_CODE_NEW_MEDIA);
+        finish();
     }
 }
