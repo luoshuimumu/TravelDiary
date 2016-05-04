@@ -38,11 +38,11 @@ public class FragListVideo extends AbsFragxxxList {
      * @return A new instance of fragment FragListVideo.
      */
     // TODO: Rename and change types and number of parameters
-    public static FragListVideo newInstance(String param1, String param2) {
+    public static FragListVideo newInstance(String param1, boolean param2) {
         FragListVideo fragment = new FragListVideo();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM_TYPE, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putBoolean(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -113,13 +113,6 @@ public class FragListVideo extends AbsFragxxxList {
             ImageView iv_thumbnail;
             TextView tv_title;
             TextView tv_content;
-        }
-    }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri, String type) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri, type);
         }
     }
 

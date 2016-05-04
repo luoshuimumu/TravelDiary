@@ -36,10 +36,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFragmentInteractionListener {
-    @Override
-    public void onFragmentInteraction(Uri uri, String type) {
-        //更新fragment列表数据
+    private static boolean FLAG_EDIT_MODE = false;
+    private List<MediaEntity> mTotalChoosedList;
 
+    /**
+     * 将加过来的entity加入mTotalChoosedList
+     *
+     * @param entity
+     */
+    @Override
+    public void onFragmentInteraction(MediaEntity entity, String mode) {
+        //更新fragment列表数据
+        if (mode.equals("add"))
+            mTotalChoosedList.add(entity);
+        else if (mode.equals("delete"))
+            mTotalChoosedList.remove(entity);
     }
 
     public static final int REQUEST_CODE_NEW_MEDIA = 1990;
@@ -233,17 +244,17 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
 
     /**
      * 需要设置fragmentList和viewPager的关系
-     * <p>
+     * <p/>
      * 这里初始化frag
      */
 
     private void initViewPager() {
         mFragList = new ArrayList<>();
-        mFragText = FragListText.newInstance(MediaEntity.TYPE_TEXT, "");
-        mFragPic = FragListPic.newInstance(MediaEntity.TYPE_PIC, "");
-        mFragAudio = FragListAudio.newInstance(MediaEntity.TYPE_AUDIO, "");
-        mFragVideo = FragListVideo.newInstance(MediaEntity.TYPE_VIDEO, "");
-        mFragTrace = FragListTrace.newInstance(MediaEntity.TYPE_TRACE, "");
+        mFragText = FragListText.newInstance(MediaEntity.TYPE_TEXT, FLAG_EDIT_MODE);
+        mFragPic = FragListPic.newInstance(MediaEntity.TYPE_PIC, FLAG_EDIT_MODE);
+        mFragAudio = FragListAudio.newInstance(MediaEntity.TYPE_AUDIO, FLAG_EDIT_MODE);
+        mFragVideo = FragListVideo.newInstance(MediaEntity.TYPE_VIDEO, FLAG_EDIT_MODE);
+        mFragTrace = FragListTrace.newInstance(MediaEntity.TYPE_TRACE, FLAG_EDIT_MODE);
         mFragList.add(mFragText);
         mFragList.add(mFragPic);
         mFragList.add(mFragAudio);

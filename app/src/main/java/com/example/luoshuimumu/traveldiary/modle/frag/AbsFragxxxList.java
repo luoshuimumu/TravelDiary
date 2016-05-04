@@ -13,8 +13,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.luoshuimumu.traveldiary.LocationApplication;
@@ -38,11 +42,12 @@ public abstract class AbsFragxxxList extends Fragment {
     private Dialog mWaitDialog;
 
     //通用控件
-//    ListView mListView;
+    ListView mAbsListView;
     //通用适配器
     BaseAdapter mAdapter;
     //通用数据项
     List<MediaEntity> mDataList;
+
 
     Handler mUIHandler;
 
@@ -59,7 +64,7 @@ public abstract class AbsFragxxxList extends Fragment {
     //type用于数据库查询函数时识别查询的媒体种类
     //预设为数据表最长五十个
     protected String mParam1;
-    protected String mParam2;
+    protected boolean mParam2;
 
     /**
      * 需要查date（可以生成title）uri location 三条数据
@@ -71,7 +76,7 @@ public abstract class AbsFragxxxList extends Fragment {
 //        Cursor cursor_test = LocationApplication.dbHelper.getReadableDatabase()
 //                .rawQuery(SQL_TEST, null);
 
-        String SQL = "select date,location,uri from media where type=\"" + type + "\";";
+        String SQL = "select date,location,uri,_id from media where type=\"" + type + "\";";
 
         mDataList = new ArrayList<>();
 //        LocationApplication.dbHelper.getReadableDatabase().execSQL(SQL);
@@ -91,6 +96,7 @@ public abstract class AbsFragxxxList extends Fragment {
                 entity.setDate(cursor.getString(cursor.getColumnIndex(MediaEntity.COLUMN_NAME_DATE)));
                 entity.setLocation(cursor.getString(cursor.getColumnIndex(MediaEntity.COLUMN_NAME_LCOATION)));
                 entity.setUri(cursor.getString(cursor.getColumnIndex(MediaEntity.COLUMN_NAME_URI)));
+                entity.setId(cursor.getString(cursor.getColumnIndex(MediaEntity.COLUMN_NAME_ID)));
 
                 mDataList.add(entity);
             }
@@ -152,13 +158,45 @@ public abstract class AbsFragxxxList extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM_TYPE);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            mParam2 = getArguments().getBoolean(ARG_PARAM2);
         }
 //        waitDialogShow();
         initDataList(mParam1);
 
+
         //开启异步进程等待数据库初始化完成 取消等待dialog
         //
+    }
+
+    /**
+     * 这个函数在以edit mode启动fragment的时候启用
+     *
+     * @param listView 不同fragment的listview
+     */
+    protected void initEditMode(ListView listView) {
+        this.mAbsListView = listView;
+        mAbsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ViewHolder holder = (ViewHolder) view.getTag();
+                //若未被选择即加入
+                if (!holder.isChoosed) {
+                    onButtonPressed(mDataList.get(position), "add");
+                } else
+                    onButtonPressed(mDataList.get(position), "delete");
+                //切换选择状态
+                holder.cb_choosed.toggle();
+
+            }
+        });
+    }
+
+    protected class ViewHolder {
+        TextView tv_title;
+        TextView tv_content;
+        ImageView iv_thumbnail;
+        CheckBox cb_choosed;
+        boolean isChoosed = false;
     }
 
     /**
@@ -191,9 +229,9 @@ public abstract class AbsFragxxxList extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri, String type) {
+    public void onButtonPressed(MediaEntity entity, String mode) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri, type);
+            mListener.onFragmentInteraction(entity, mode);
         }
     }
 
@@ -226,7 +264,7 @@ public abstract class AbsFragxxxList extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(Uri uri, String type);
+        public void onFragmentInteraction(MediaEntity entity, String mode);
     }
 
 //    abstract public void refreshLocation();

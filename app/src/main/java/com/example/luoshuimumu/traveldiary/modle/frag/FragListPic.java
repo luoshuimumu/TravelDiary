@@ -28,11 +28,11 @@ public class FragListPic extends AbsFragxxxList {
 
     private OnFragmentInteractionListener mListener;
 
-    public static FragListPic newInstance(String param1, String param2) {
+    public static FragListPic newInstance(String param1, boolean param2) {
         FragListPic fragment = new FragListPic();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM_TYPE, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putBoolean(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -104,12 +104,6 @@ public class FragListPic extends AbsFragxxxList {
         return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri, String type) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri, type);
-        }
-    }
 
     @Override
     public void onAttach(Activity activity) {
