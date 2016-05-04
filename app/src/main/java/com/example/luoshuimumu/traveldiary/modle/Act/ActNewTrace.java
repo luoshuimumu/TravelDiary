@@ -58,7 +58,7 @@ public class ActNewTrace extends AbsActNewMedia {
      * 在完成前调用 将文件写入txt
      */
     private void writeLocationTxt() {
-        initPicPath();
+        initTracePath();
         File file = new File(mPath);
         try {
             OutputStream os = new FileOutputStream(file);
@@ -81,7 +81,7 @@ public class ActNewTrace extends AbsActNewMedia {
 
     }
 
-    private void initPicPath() {
+    private void initTracePath() {
         String outputPath = ActNewTrace.this.getExternalFilesDir(null).toString();
         mTime = TimeUtils.getTime();
         mPath = outputPath + "/trace" + mTime + ".txt";

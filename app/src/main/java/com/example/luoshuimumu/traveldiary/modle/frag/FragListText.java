@@ -1,14 +1,19 @@
 package com.example.luoshuimumu.traveldiary.modle.frag;
 
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.luoshuimumu.traveldiary.R;
+import com.example.luoshuimumu.traveldiary.modle.DB.MediaEntity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,15 +24,7 @@ import com.example.luoshuimumu.traveldiary.R;
  * create an instance of this fragment.
  */
 public class FragListText extends AbsFragxxxList {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-//    private static final String ARG_PARAM1 = "param1";
-//    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    ListView mListView;
     private OnFragmentInteractionListener mListener;
 
     /**
@@ -55,17 +52,63 @@ public class FragListText extends AbsFragxxxList {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        if (getArguments() != null) {
-//            mParam1 = getArguments().getString(ARG_PARAM1);
-//            mParam2 = getArguments().getString(ARG_PARAM2);
-//        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_frag_llist_text, container, false);
+        View view = inflater.inflate(R.layout.fragment_frag_llist_text, container, false);
+        mListView = (ListView) view.findViewById(R.id.listview);
+        mAdapter = new TextAdapter(getActivity());
+        mListView.setAdapter(mAdapter);
+        return view;
+    }
+
+    private class TextAdapter extends BaseAdapter {
+        public TextAdapter(Context context) {
+            this.inflater = LayoutInflater.from(context);
+        }
+
+        private LayoutInflater inflater;
+
+        @Override
+        public int getCount() {
+            return mDataList.size();
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            Holder holder;
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.widget_frag_pic_listitem, null);
+                holder = new Holder();
+                holder.tv_title = (TextView) convertView.findViewById(R.id.tv_title);
+                holder.tv_content = (TextView) convertView.findViewById(R.id.tv_content);
+
+                convertView.setTag(holder);
+            } else {
+                holder = (Holder) convertView.getTag();
+            }
+            holder.tv_title.setText(getItem(position).getDate());
+            holder.tv_content.setText(getItem(position).getLocation());
+
+            return convertView;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public MediaEntity getItem(int position) {
+            return mDataList.get(position);
+        }
+
+        private class Holder {
+            TextView tv_title;
+            TextView tv_content;
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
