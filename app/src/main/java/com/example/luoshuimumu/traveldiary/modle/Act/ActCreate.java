@@ -34,10 +34,12 @@ import com.example.luoshuimumu.traveldiary.modle.frag.ViewPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFragmentInteractionListener {
-    private static boolean FLAG_EDIT_MODE = false;
-    private List<MediaEntity> mTotalChoosedList;
+    private static boolean FLAG_EDIT_MODE = true;
+    private Set<MediaEntity> mTotalChoosedList = new TreeSet<>();
 
     /**
      * 将加过来的entity加入mTotalChoosedList
@@ -543,6 +545,11 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
         switch (item.getItemId()) {
             case R.id.action_new_media:
                 onNewMediaClick();
+                return true;
+            case R.id.action_edit_mode:
+                FLAG_EDIT_MODE = !FLAG_EDIT_MODE;
+                mPagerAdapter.notifyDataSetChanged();
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

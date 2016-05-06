@@ -6,7 +6,42 @@ import android.database.sqlite.SQLiteDatabase;
  * 媒体实体类型 用于保存fragment从数据库查询到的媒体列表数据
  * Created by luoshuimumu on 2016/4/13.
  */
-public class MediaEntity {
+public class MediaEntity implements Comparable<MediaEntity> {
+    @Override
+    public int compareTo(MediaEntity another) {
+        if (Long.parseLong(this.id) > Long.parseLong(another.getId())) {
+            return 1;
+
+        } else if (Long.parseLong(this.id) == Long.parseLong(another.getId())) {
+            return 0;
+        }
+        return -1;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!((MediaEntity) o).getId().equals(this.getId())) {
+            return false;
+        }
+        if (!((MediaEntity) o).getPath().equals(this.getPath())) {
+            return false;
+        }
+        if (!((MediaEntity) o).getType().equals(this.getType())) {
+            return false;
+        }
+        if (!((MediaEntity) o).getDate().equals(this.getDate())) {
+            return false;
+        }
+        if (!((MediaEntity) o).getLocation().equals(this.getLocation())) {
+            return false;
+        }
+        if (!((MediaEntity) o).getUri().equals(this.getUri())) {
+            return false;
+        }
+
+        return true;
+    }
+
     public static final String TYPE_PIC = "pic";
     public static final String TYPE_TEXT = "text";
     public static final String TYPE_AUDIO = "audio";

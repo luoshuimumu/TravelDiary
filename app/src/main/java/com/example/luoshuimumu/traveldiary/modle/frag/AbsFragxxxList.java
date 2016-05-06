@@ -26,7 +26,10 @@ import com.example.luoshuimumu.traveldiary.R;
 import com.example.luoshuimumu.traveldiary.modle.DB.MediaEntity;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,7 +50,9 @@ public abstract class AbsFragxxxList extends Fragment {
     BaseAdapter mAdapter;
     //通用数据项
     List<MediaEntity> mDataList;
-
+    //需要每个fragment单独记录已经被选定的媒体项
+    //有序 不允许重复
+    Set mDataSet = new TreeSet();
 
     Handler mUIHandler;
 
@@ -178,12 +183,19 @@ public abstract class AbsFragxxxList extends Fragment {
         mAbsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (!mParam2) return;
                 ViewHolder holder = (ViewHolder) view.getTag();
+                MediaEntity entity = mDataList.get(position);
                 //若未被选择即加入
                 if (!holder.isChoosed) {
-                    onButtonPressed(mDataList.get(position), "add");
-                } else
-                    onButtonPressed(mDataList.get(position), "delete");
+
+                    onButtonPressed(entity, "add");
+                    //同时更新本地列表的状态
+                    mDataSet.add(entity);
+                } else {
+                    onButtonPressed(entity, "delete");
+                    mDataSet.remove(entity);
+                }
                 //切换选择状态
                 holder.cb_choosed.toggle();
 

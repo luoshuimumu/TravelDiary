@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -80,21 +81,29 @@ public class FragListVideo extends AbsFragxxxList {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Holder holder;
+            ViewHolder holder;
             if (convertView == null) {
                 convertView = inflater.inflate(R.layout.widget_frag_video_listitem, null);
-                holder = new Holder();
+                holder = new ViewHolder();
                 holder.tv_title = (TextView) convertView.findViewById(R.id.tv_title);
                 holder.tv_content = (TextView) convertView.findViewById(R.id.tv_content);
                 holder.iv_thumbnail = (ImageView) convertView.findViewById(R.id.iv_thumbnail);
+                holder.cb_choosed = (CheckBox) convertView.findViewById(R.id.cb_choosed);
 
                 convertView.setTag(holder);
             } else {
-                holder = (Holder) convertView.getTag();
+                holder = (ViewHolder) convertView.getTag();
             }
             holder.tv_title.setText(getItem(position).getDate());
             holder.tv_content.setText(getItem(position).getLocation());
             holder.iv_thumbnail.setImageResource(R.drawable.ic_action_info);
+            if (mParam2) {
+                holder.cb_choosed.setVisibility(View.VISIBLE);
+                holder.isChoosed = mDataSet.contains(mDataList.get(position));
+                if (holder.isChoosed) holder.cb_choosed.setChecked(true);
+            } else {
+                holder.cb_choosed.setVisibility(View.INVISIBLE);
+            }
 
             return convertView;
         }
@@ -109,11 +118,7 @@ public class FragListVideo extends AbsFragxxxList {
             return mDataList.get(position);
         }
 
-        private class Holder {
-            ImageView iv_thumbnail;
-            TextView tv_title;
-            TextView tv_content;
-        }
+
     }
 
     @Override
