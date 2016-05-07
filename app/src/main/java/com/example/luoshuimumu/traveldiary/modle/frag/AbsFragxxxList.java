@@ -165,6 +165,7 @@ public abstract class AbsFragxxxList extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM_TYPE);
             mParam2 = getArguments().getBoolean(ARG_PARAM2);
         }
+        Log.e("mParam2", String.valueOf(mParam2));
 //        waitDialogShow();
         initDataList(mParam1);
 

@@ -3,6 +3,7 @@ package com.example.luoshuimumu.traveldiary.modle.frag;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,11 +40,13 @@ public class FragListAudio extends AbsFragxxxList {
      */
     // TODO: Rename and change types and number of parameters
     public static FragListAudio newInstance(String param1, boolean param2) {
+
         FragListAudio fragment = new FragListAudio();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM_TYPE, param1);
         args.putBoolean(ARG_PARAM2, param2);
         fragment.setArguments(args);
+
         return fragment;
     }
 

@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.luoshuimumu.traveldiary.R;
+import com.example.luoshuimumu.traveldiary.modle.Act.ActCreate;
 import com.example.luoshuimumu.traveldiary.modle.DB.MediaEntity;
 
 /**
@@ -97,7 +98,8 @@ public class FragListVideo extends AbsFragxxxList {
             holder.tv_title.setText(getItem(position).getDate());
             holder.tv_content.setText(getItem(position).getLocation());
             holder.iv_thumbnail.setImageResource(R.drawable.ic_action_info);
-            if (mParam2) {
+            holder.cb_choosed.setVisibility(View.INVISIBLE);
+            if (ActCreate.FLAG_EDIT_MODE) {
                 holder.cb_choosed.setVisibility(View.VISIBLE);
                 holder.isChoosed = mDataSet.contains(mDataList.get(position));
                 if (holder.isChoosed) holder.cb_choosed.setChecked(true);

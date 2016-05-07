@@ -3,6 +3,7 @@ package com.example.luoshuimumu.traveldiary.modle.frag;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -29,6 +30,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getItemPosition(Object object) {
+        Log.e("getItemPosition", object.getClass().getSimpleName());
 //        return super.getItemPosition(object);
         return POSITION_NONE;
     }

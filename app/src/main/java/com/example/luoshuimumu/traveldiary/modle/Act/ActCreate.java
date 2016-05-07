@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,7 +39,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFragmentInteractionListener {
-    private static boolean FLAG_EDIT_MODE = true;
+    public static boolean FLAG_EDIT_MODE = true;
     private Set<MediaEntity> mTotalChoosedList = new TreeSet<>();
 
     /**
@@ -265,7 +266,7 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
 
         mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), mFragList);
         mViewPager.setAdapter(mPagerAdapter);
-        setTabSelection(1);
+        setTabSelection(0);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -547,8 +548,10 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
                 onNewMediaClick();
                 return true;
             case R.id.action_edit_mode:
+
                 FLAG_EDIT_MODE = !FLAG_EDIT_MODE;
-                mPagerAdapter.notifyDataSetChanged();
+                Log.e("FLAG_EDIT_MODE", String.valueOf(FLAG_EDIT_MODE));
+                refreshUI();
 
                 return true;
             default:
