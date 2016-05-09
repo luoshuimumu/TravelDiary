@@ -3,11 +3,14 @@ package com.example.luoshuimumu.traveldiary.modle.frag;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 
 import android.os.Handler;
+import android.os.Message;
+import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,6 +26,7 @@ import android.widget.Toast;
 
 import com.example.luoshuimumu.traveldiary.LocationApplication;
 import com.example.luoshuimumu.traveldiary.R;
+import com.example.luoshuimumu.traveldiary.modle.Act.ActCreate;
 import com.example.luoshuimumu.traveldiary.modle.DB.MediaEntity;
 
 import java.util.ArrayList;
@@ -40,25 +44,61 @@ import java.util.TreeSet;
  * create an instance of this fragment.
  */
 public abstract class AbsFragxxxList extends Fragment {
+    Bundle savedState;
+    static public final int MSG_REFRESH_UI = 1;
+    static public final int MSG_REFRESH_DATA = 2;
     //数据初始化模块
     private boolean FLAG_DATA_INIT_COMPLETE = false;
     private Dialog mWaitDialog;
 
     //通用控件
-    ListView mAbsListView;
+    AdapterView.OnItemClickListener mAbsListener;
     //通用适配器
     BaseAdapter mAdapter;
     //通用数据项
     List<MediaEntity> mDataList;
     //需要每个fragment单独记录已经被选定的媒体项
-    //有序 不允许重复
-    Set mDataSet = new TreeSet();
+    //有序 不允许重复 这个变量应该是被储存的
+    ArrayList<String> mEditStateDataList = new ArrayList<>();
 
-    Handler mUIHandler;
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            mParam1 = getArguments().getString(ARG_PARAM_TYPE);
+//            mParam2 = getArguments().getParcelableArrayList(ARG_PARAM2);
+        }
+//        Log.e("mParam2", String.valueOf(mParam2));
+//        waitDialogShow();
+        initDataList(mParam1);
+
+
+        //开启异步进程等待数据库初始化完成 取消等待dialog
+        //
+    }
+
+    Handler mUIHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            switch (msg.what) {
+                case MSG_REFRESH_DATA:
+                    updateDataList(msg.getData().getString("type"), msg.getData().getString("time"));
+                    break;
+                case MSG_REFRESH_UI:
+                    refreshUI();
+                    break;
+                default:
+                    break;
+
+            }
+        }
+    };
 
     //与activity交互
-//    abstract void refreshUI();
-
+    private void refreshUI() {
+        mAdapter.notifyDataSetChanged();
+    }
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -69,7 +109,7 @@ public abstract class AbsFragxxxList extends Fragment {
     //type用于数据库查询函数时识别查询的媒体种类
     //预设为数据表最长五十个
     protected String mParam1;
-    protected boolean mParam2;
+    protected List<MediaEntity> mParam2;
 
     /**
      * 需要查date（可以生成title）uri location 三条数据
@@ -114,6 +154,45 @@ public abstract class AbsFragxxxList extends Fragment {
         }
 
     }
+
+
+    /**
+     * 通过handle调用
+     * 在ActNewMedia返回时调用 主动更新mDataList
+     * 用type和time查询
+     *
+     * @param type
+     * @param time
+     */
+    private void updateDataList(String type, String time) {
+        if (!FLAG_DATA_INIT_COMPLETE) initDataList(type);
+        String SQL = "select date,location,uri,_id from media " +
+                "where type=\"" + type + "\" and date=\"" + time + "\";";
+        try {
+            Cursor cursor = LocationApplication.dbHelper.getReadableDatabase()
+                    .rawQuery(SQL, null);
+            if (cursor == null || cursor.getCount() == 0) {
+                //错误处理
+                return;
+            }
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+
+                MediaEntity entity = new MediaEntity();
+                entity.setDate(cursor.getString(cursor.getColumnIndex(MediaEntity.COLUMN_NAME_DATE)));
+                entity.setLocation(cursor.getString(cursor.getColumnIndex(MediaEntity.COLUMN_NAME_LCOATION)));
+                entity.setUri(cursor.getString(cursor.getColumnIndex(MediaEntity.COLUMN_NAME_URI)));
+                entity.setId(cursor.getString(cursor.getColumnIndex(MediaEntity.COLUMN_NAME_ID)));
+
+                mDataList.add(entity);
+            }
+
+            cursor.close();
+            LocationApplication.dbHelper.close();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+    }
 //    Cursor cursor = db.rawQuery(“select * from person”, null);
 //
 //    while (cursor.moveToNext()) {
@@ -142,8 +221,7 @@ public abstract class AbsFragxxxList extends Fragment {
      */
     // TODO: Rename and change types and number of parameters
     public static AbsFragxxxList newInstance(String param1, String param2) {
-        //在这里初始化类头部声明的成员
-
+        //子类会覆盖掉mArguments
 
 //        AbsFragxxxList fragment = new AbsFragxxxList();
 //        Bundle args = new Bundle();
@@ -158,21 +236,6 @@ public abstract class AbsFragxxxList extends Fragment {
         // Required empty public constructor
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM_TYPE);
-            mParam2 = getArguments().getBoolean(ARG_PARAM2);
-        }
-        Log.e("mParam2", String.valueOf(mParam2));
-//        waitDialogShow();
-        initDataList(mParam1);
-
-
-        //开启异步进程等待数据库初始化完成 取消等待dialog
-        //
-    }
 
     /**
      * 这个函数在以edit mode启动fragment的时候启用
@@ -180,28 +243,33 @@ public abstract class AbsFragxxxList extends Fragment {
      * @param listView 不同fragment的listview
      */
     protected void initEditMode(ListView listView) {
-        this.mAbsListView = listView;
-        mAbsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mAbsListener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!mParam2) return;
+                Log.e(this.getClass().getSimpleName(), "onItemClick:" + position);
+                if (!ActCreate.FLAG_EDIT_MODE) return;
                 ViewHolder holder = (ViewHolder) view.getTag();
                 MediaEntity entity = mDataList.get(position);
                 //若未被选择即加入
                 if (!holder.isChoosed) {
-
                     onButtonPressed(entity, "add");
                     //同时更新本地列表的状态
-                    mDataSet.add(entity);
+                    mEditStateDataList.add(entity.getId());
                 } else {
                     onButtonPressed(entity, "delete");
-                    mDataSet.remove(entity);
+                    String temp = entity.getId();
+                    for (int i = 0; i < mEditStateDataList.size(); i++) {
+                        if (temp.equals(mEditStateDataList.get(i))) {
+                            mEditStateDataList.remove(i--);
+                        }
+                    }
                 }
                 //切换选择状态
                 holder.cb_choosed.toggle();
+                holder.isChoosed = !holder.isChoosed;
 
             }
-        });
+        };
     }
 
     protected class ViewHolder {
@@ -210,6 +278,7 @@ public abstract class AbsFragxxxList extends Fragment {
         ImageView iv_thumbnail;
         CheckBox cb_choosed;
         boolean isChoosed = false;
+        String id;
     }
 
     /**
@@ -234,10 +303,50 @@ public abstract class AbsFragxxxList extends Fragment {
         }
     }
 
+    //同时调用buttonPressed让ActCreate保存已选的编辑列表
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //防止两次旋转屏幕导致mEditStateDataList丢失
+//        if (getView() != null)
+//            mEditStateDataList = outState.getStringArrayList("mEditStateDataList");
+//        if (mEditStateDataList != null) {
+//            outState.putStringArrayList("mEditStateDataList", mEditStateDataList);
+//        }
+    }
+
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+//        if (savedInstanceState != null)
+//            mEditStateDataList = savedInstanceState.getStringArrayList("mEditStateDataList");
+    }
+
+    /**
+     * 用Argument保存mEditStateDataList
+     */
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        saveState();
+    }
+
+    private void saveState() {
+        getArguments().putStringArrayList("mEditStateDataList", mEditStateDataList);
+    }
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        if (getArguments().getStringArrayList("mEditStateDataList") != null)
+            mEditStateDataList = getArguments().getStringArrayList("mEditStateDataList");
+        if (getArguments().getStringArrayList("mEditStateDataList") != null) {
+            mEditStateDataList = getArguments().getStringArrayList("mEditStateDataList");
+        }
+        if (mEditStateDataList == null) {
+            mEditStateDataList = new ArrayList<>();
+        }
+
         return inflater.inflate(R.layout.fragment_abs_fragxxx_list, container, false);
     }
 
@@ -249,7 +358,7 @@ public abstract class AbsFragxxxList extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Context activity) {
         super.onAttach(activity);
         try {
             mListener = (OnFragmentInteractionListener) activity;
@@ -257,6 +366,8 @@ public abstract class AbsFragxxxList extends Fragment {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        //这句写的...耦合了?
+        ((ActCreate) getActivity()).setmFragUIHandler(mUIHandler);
     }
 
     @Override

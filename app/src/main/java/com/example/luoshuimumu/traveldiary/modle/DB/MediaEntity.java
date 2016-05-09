@@ -1,12 +1,27 @@
 package com.example.luoshuimumu.traveldiary.modle.DB;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
 
 /**
  * 媒体实体类型 用于保存fragment从数据库查询到的媒体列表数据
  * Created by luoshuimumu on 2016/4/13.
  */
-public class MediaEntity implements Comparable<MediaEntity> {
+public class MediaEntity implements Comparable<MediaEntity>,Parcelable{
+    static int CREATOR;
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
+
     @Override
     public int compareTo(MediaEntity another) {
         if (Long.parseLong(this.id) > Long.parseLong(another.getId())) {

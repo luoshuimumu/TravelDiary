@@ -18,6 +18,8 @@ import com.example.luoshuimumu.traveldiary.R;
 import com.example.luoshuimumu.traveldiary.modle.Act.ActCreate;
 import com.example.luoshuimumu.traveldiary.modle.DB.MediaEntity;
 
+import java.util.ArrayList;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -61,6 +63,7 @@ public class FragListVideo extends AbsFragxxxList {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        super.onCreateView(inflater,container,savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_frag_list_pic, container, false);
         mListView = (ListView) view.findViewById(R.id.listview);
         mAdapter = new VideoAdapter(getActivity());
@@ -98,10 +101,10 @@ public class FragListVideo extends AbsFragxxxList {
             holder.tv_title.setText(getItem(position).getDate());
             holder.tv_content.setText(getItem(position).getLocation());
             holder.iv_thumbnail.setImageResource(R.drawable.ic_action_info);
-            holder.cb_choosed.setVisibility(View.INVISIBLE);
+            holder.id = getItem(position).getId();
             if (ActCreate.FLAG_EDIT_MODE) {
                 holder.cb_choosed.setVisibility(View.VISIBLE);
-                holder.isChoosed = mDataSet.contains(mDataList.get(position));
+                holder.isChoosed = mEditStateDataList.contains(holder.id);
                 if (holder.isChoosed) holder.cb_choosed.setChecked(true);
             } else {
                 holder.cb_choosed.setVisibility(View.INVISIBLE);

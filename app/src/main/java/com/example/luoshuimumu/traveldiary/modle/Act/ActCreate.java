@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
@@ -37,24 +39,63 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+// TODO: 2016/5/9 ActNewMedia返回后Fragment的mDataList未更新 故页面也未更新
+// TODO: 2016/5/9 Fragment 状态保存未完成 编辑模式下checkbox勾选 左右滑动后消失
 
 public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFragmentInteractionListener {
     public static boolean FLAG_EDIT_MODE = true;
-    private Set<MediaEntity> mTotalChoosedList = new TreeSet<>();
+    //持有五个fragment的编辑状态缓存列表,在新建fragment时传输过去
+    private Set<MediaEntity> mTextChoosedList = new TreeSet<>();
+    private Set<MediaEntity> mPicChoosedList = new TreeSet<>();
+    private Set<MediaEntity> mAudioChoosedList = new TreeSet<>();
+    private Set<MediaEntity> mVideoChoosedList = new TreeSet<>();
+    private Set<MediaEntity> mTraceChoosedList = new TreeSet<>();
 
-    /**
-     * 将加过来的entity加入mTotalChoosedList
-     *
-     * @param entity
-     */
     @Override
     public void onFragmentInteraction(MediaEntity entity, String mode) {
-        //更新fragment列表数据
-        if (mode.equals("add"))
-            mTotalChoosedList.add(entity);
-        else if (mode.equals("delete"))
-            mTotalChoosedList.remove(entity);
     }
+
+//    /**
+//     * 将加过来的entity加入mTotalChoosedList
+//     *
+//     * @param entity
+//     */
+//    @Override
+//    public void onFragmentInteraction(MediaEntity entity, String mode, String frag) {
+//        if (frag.equals(FragListText.class.getSimpleName())) {
+//            //更新fragment列表数据
+//            if (mode.equals("add"))
+//                mTextChoosedList.add(entity);
+//            else if (mode.equals("delete"))
+//                mTextChoosedList.remove(entity);
+//        } else if (frag.equals(FragListPic.class.getSimpleName())) {
+//            //更新fragment列表数据
+//            if (mode.equals("add"))
+//                mPicChoosedList.add(entity);
+//            else if (mode.equals("delete"))
+//                mPicChoosedList.remove(entity);
+//        } else if (frag.equals(FragListAudio.class.getSimpleName())) {
+//            //更新fragment列表数据
+//            if (mode.equals("add"))
+//                mAudioChoosedList.add(entity);
+//            else if (mode.equals("delete"))
+//                mAudioChoosedList.remove(entity);
+//        } else if (frag.equals(FragListVideo.class.getSimpleName())) {
+//            //更新fragment列表数据
+//            if (mode.equals("add"))
+//                mVideoChoosedList.add(entity);
+//            else if (mode.equals("delete"))
+//                mVideoChoosedList.remove(entity);
+//        } else if (frag.equals(FragListTrace.class.getSimpleName())) {
+//            //更新fragment列表数据
+//            if (mode.equals("add"))
+//                mTraceChoosedList.add(entity);
+//            else if (mode.equals("delete"))
+//                mTraceChoosedList.remove(entity);
+//        }
+//
+//
+//    }
 
     public static final int REQUEST_CODE_NEW_MEDIA = 1990;
 
@@ -112,7 +153,9 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_act_create);
+
 //        if (LocationApplication.dbHelper.getWritableDatabase() == null) {
 //            Toast.makeText(ActCreate.this, "db failed", Toast.LENGTH_SHORT).show();
 //        } else {
@@ -350,25 +393,31 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
             //入库 更新ui
             switch (resultCode) {
                 case RESULT_CODE_NEW_PIC:
+                    data.putExtra("type", MediaEntity.TYPE_PIC);
                     insertPic(data);
                     break;
                 case RESULT_CODE_NEW_TEXT:
+                    data.putExtra("type", MediaEntity.TYPE_TEXT);
                     insertText(data);
                     break;
                 case RESULT_CODE_NEW_AUDIO:
+                    data.putExtra("type", MediaEntity.TYPE_AUDIO);
                     insertAudio(data);
                     break;
                 case RESULT_CODE_NEW_VIDEO:
+                    data.putExtra("type", MediaEntity.TYPE_VIDEO);
                     insertVideo(data);
                     break;
                 case RESULT_CODE_NEW_TRACE:
+                    data.putExtra("type", MediaEntity.TYPE_TRACE);
                     insertTrace(data);
                     break;
                 default:
                     break;
             }
+            //没有新插入数据时不更新
             //更新列表 每个列表在不同的fragment中 应该指定更新其中一个fragment
-            refreshUI();
+
         }
 
 
@@ -414,33 +463,54 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
      * @return 是否插入成功的标记(未使用)
      */
     private boolean insertPic(Intent data) {
-        data.putExtra("type", MediaEntity.TYPE_PIC);
+
         insertData(data);
+        refreshPicData(data);
+        refreshUI();
         return true;
     }
 
     private boolean insertText(Intent data) {
-        data.putExtra("type", MediaEntity.TYPE_TEXT);
+
         insertData(data);
+        refreshPicData(data);
+        refreshUI();
         return true;
     }
 
     private boolean insertAudio(Intent data) {
-        data.putExtra("type", MediaEntity.TYPE_AUDIO);
+
         insertData(data);
+        refreshPicData(data);
+        refreshUI();
         return true;
     }
 
     private boolean insertVideo(Intent data) {
-        data.putExtra("type", MediaEntity.TYPE_VIDEO);
+
         insertData(data);
+        refreshPicData(data);
+        refreshUI();
         return true;
     }
 
     private boolean insertTrace(Intent data) {
-        data.putExtra("type", MediaEntity.TYPE_TRACE);
+
         insertData(data);
+        refreshPicData(data);
+        refreshUI();
         return true;
+    }
+
+    // TODO: 2016/5/9 type是在insert函数里面加的 这里没有
+    private void refreshPicData(Intent data) {
+        Message msg = new Message();
+        msg.what = AbsFragxxxList.MSG_REFRESH_DATA;
+        Bundle bundle = new Bundle();
+        bundle.putString("type", data.getStringExtra("type"));
+        bundle.putString("time", data.getStringExtra("time"));
+        msg.setData(bundle);
+        mFragUIHandler.sendMessage(msg);
     }
 
     /**
@@ -450,6 +520,7 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
         if (mPagerAdapter != null) mPagerAdapter.notifyDataSetChanged();
 
     }
+
 
 //    /**
 //     * 初始化返回地图结果的监听器
@@ -568,5 +639,11 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
         if (LocationApplication.dbHelper != null) {
             LocationApplication.dbHelper.close();
         }
+    }
+
+    private Handler mFragUIHandler;
+
+    public void setmFragUIHandler(Handler handler) {
+        this.mFragUIHandler = handler;
     }
 }
