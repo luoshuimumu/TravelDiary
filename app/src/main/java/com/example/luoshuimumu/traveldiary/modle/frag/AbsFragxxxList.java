@@ -44,7 +44,6 @@ import java.util.TreeSet;
  * create an instance of this fragment.
  */
 public abstract class AbsFragxxxList extends Fragment {
-    Bundle savedState;
     static public final int MSG_REFRESH_UI = 1;
     static public final int MSG_REFRESH_DATA = 2;
     //数据初始化模块
@@ -58,7 +57,7 @@ public abstract class AbsFragxxxList extends Fragment {
     //通用数据项
     List<MediaEntity> mDataList;
     //需要每个fragment单独记录已经被选定的媒体项
-    //有序 不允许重复 这个变量应该是被储存的
+    // 不允许重复 当再次点击item时会删除重复的项 这个变量应该是被储存的
     ArrayList<String> mEditStateDataList = new ArrayList<>();
 
     @Override
@@ -68,10 +67,9 @@ public abstract class AbsFragxxxList extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM_TYPE);
 //            mParam2 = getArguments().getParcelableArrayList(ARG_PARAM2);
         }
-//        Log.e("mParam2", String.valueOf(mParam2));
 //        waitDialogShow();
         initDataList(mParam1);
-
+        ((ActCreate) getActivity()).registHandler(mParam1, mUIHandler);
 
         //开启异步进程等待数据库初始化完成 取消等待dialog
         //
@@ -84,6 +82,7 @@ public abstract class AbsFragxxxList extends Fragment {
             switch (msg.what) {
                 case MSG_REFRESH_DATA:
                     updateDataList(msg.getData().getString("type"), msg.getData().getString("time"));
+                    refreshUI();
                     break;
                 case MSG_REFRESH_UI:
                     refreshUI();
@@ -96,6 +95,7 @@ public abstract class AbsFragxxxList extends Fragment {
     };
 
     //与activity交互
+    // TODO: 2016/5/10 这函数好像没卵用
     private void refreshUI() {
         mAdapter.notifyDataSetChanged();
     }
@@ -239,10 +239,8 @@ public abstract class AbsFragxxxList extends Fragment {
 
     /**
      * 这个函数在以edit mode启动fragment的时候启用
-     *
-     * @param listView 不同fragment的listview
      */
-    protected void initEditMode(ListView listView) {
+    protected AdapterView.OnItemClickListener getEditListener() {
         mAbsListener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -270,6 +268,7 @@ public abstract class AbsFragxxxList extends Fragment {
 
             }
         };
+        return mAbsListener;
     }
 
     protected class ViewHolder {
@@ -303,24 +302,6 @@ public abstract class AbsFragxxxList extends Fragment {
         }
     }
 
-    //同时调用buttonPressed让ActCreate保存已选的编辑列表
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        //防止两次旋转屏幕导致mEditStateDataList丢失
-//        if (getView() != null)
-//            mEditStateDataList = outState.getStringArrayList("mEditStateDataList");
-//        if (mEditStateDataList != null) {
-//            outState.putStringArrayList("mEditStateDataList", mEditStateDataList);
-//        }
-    }
-
-    @Override
-    public void onViewStateRestored(Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-//        if (savedInstanceState != null)
-//            mEditStateDataList = savedInstanceState.getStringArrayList("mEditStateDataList");
-    }
-
     /**
      * 用Argument保存mEditStateDataList
      */
@@ -334,18 +315,20 @@ public abstract class AbsFragxxxList extends Fragment {
         getArguments().putStringArrayList("mEditStateDataList", mEditStateDataList);
     }
 
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        if (getArguments().getStringArrayList("mEditStateDataList") != null)
-            mEditStateDataList = getArguments().getStringArrayList("mEditStateDataList");
+    private void restoreState() {
         if (getArguments().getStringArrayList("mEditStateDataList") != null) {
             mEditStateDataList = getArguments().getStringArrayList("mEditStateDataList");
         }
         if (mEditStateDataList == null) {
             mEditStateDataList = new ArrayList<>();
         }
+    }
+
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        restoreState();
 
         return inflater.inflate(R.layout.fragment_abs_fragxxx_list, container, false);
     }
@@ -367,7 +350,7 @@ public abstract class AbsFragxxxList extends Fragment {
                     + " must implement OnFragmentInteractionListener");
         }
         //这句写的...耦合了?
-        ((ActCreate) getActivity()).setmFragUIHandler(mUIHandler);
+
     }
 
     @Override

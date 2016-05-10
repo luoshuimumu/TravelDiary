@@ -5,6 +5,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
+import android.util.SparseArray;
+import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
@@ -35,4 +38,5 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 //      return super.getItemPosition(object);
         return POSITION_NONE;
     }
+
 }

@@ -36,7 +36,9 @@ import com.example.luoshuimumu.traveldiary.modle.frag.FragListVideo;
 import com.example.luoshuimumu.traveldiary.modle.frag.ViewPagerAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 // TODO: 2016/5/9 ActNewMedia返回后Fragment的mDataList未更新 故页面也未更新
@@ -465,7 +467,7 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
     private boolean insertPic(Intent data) {
 
         insertData(data);
-        refreshPicData(data);
+        refreshFragDataList(data);
         refreshUI();
         return true;
     }
@@ -473,7 +475,7 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
     private boolean insertText(Intent data) {
 
         insertData(data);
-        refreshPicData(data);
+        refreshFragDataList(data);
         refreshUI();
         return true;
     }
@@ -481,7 +483,7 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
     private boolean insertAudio(Intent data) {
 
         insertData(data);
-        refreshPicData(data);
+        refreshFragDataList(data);
         refreshUI();
         return true;
     }
@@ -489,7 +491,7 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
     private boolean insertVideo(Intent data) {
 
         insertData(data);
-        refreshPicData(data);
+        refreshFragDataList(data);
         refreshUI();
         return true;
     }
@@ -497,21 +499,11 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
     private boolean insertTrace(Intent data) {
 
         insertData(data);
-        refreshPicData(data);
+        refreshFragDataList(data);
         refreshUI();
         return true;
     }
 
-    // TODO: 2016/5/9 type是在insert函数里面加的 这里没有
-    private void refreshPicData(Intent data) {
-        Message msg = new Message();
-        msg.what = AbsFragxxxList.MSG_REFRESH_DATA;
-        Bundle bundle = new Bundle();
-        bundle.putString("type", data.getStringExtra("type"));
-        bundle.putString("time", data.getStringExtra("time"));
-        msg.setData(bundle);
-        mFragUIHandler.sendMessage(msg);
-    }
 
     /**
      * 刷新方法 应查询数据库 更新listview的数据
@@ -641,9 +633,25 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
         }
     }
 
-    private Handler mFragUIHandler;
+    Map<String, Handler> mFragUIHandlerList = new HashMap<>();
 
-    public void setmFragUIHandler(Handler handler) {
-        this.mFragUIHandler = handler;
+    public void registHandler(String type, Handler handler) {
+        if (mFragUIHandlerList == null) mFragUIHandlerList = new HashMap<>();
+        mFragUIHandlerList.put(type, handler);
+    }
+
+    // TODO: 2016/5/9 type是在insert函数里面加的 这里没有
+    private void refreshFragDataList(Intent data) {
+        Message msg = new Message();
+        msg.what = AbsFragxxxList.MSG_REFRESH_DATA;
+        Bundle bundle = new Bundle();
+        String type = data.getStringExtra("type");
+        bundle.putString("type", type);
+        bundle.putString("time", data.getStringExtra("time"));
+        msg.setData(bundle);
+
+        Handler handler =
+                mFragUIHandlerList.get(type);
+        handler.sendMessage(msg);
     }
 }

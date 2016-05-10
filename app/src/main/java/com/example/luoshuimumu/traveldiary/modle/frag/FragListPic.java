@@ -30,8 +30,6 @@ import java.util.ArrayList;
 public class FragListPic extends AbsFragxxxList {
     ListView mListView;
 
-    private OnFragmentInteractionListener mListener;
-
     public static FragListPic newInstance(String param1, boolean param2) {
         FragListPic fragment = new FragListPic();
         Bundle args = new Bundle();
@@ -112,6 +110,8 @@ public class FragListPic extends AbsFragxxxList {
         mListView = (ListView) view.findViewById(R.id.listview);
         mAdapter = new PicAdapter(getActivity());
         mListView.setAdapter(mAdapter);
+
+        mListView.setOnItemClickListener(getEditListener());
         return view;
     }
 

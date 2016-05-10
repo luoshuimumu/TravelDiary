@@ -29,8 +29,6 @@ import java.util.ArrayList;
 public class FragListTrace extends AbsFragxxxList {
 
     ListView mListView;
-    private OnFragmentInteractionListener mListener;
-
 
     // TODO: Rename and change types and number of parameters
     public static FragListTrace newInstance(String param1, boolean param2) {
@@ -59,6 +57,8 @@ public class FragListTrace extends AbsFragxxxList {
         mListView = (ListView) view.findViewById(R.id.listview);
         mAdapter = new PicAdapter(getActivity());
         mListView.setAdapter(mAdapter);
+
+        mListView.setOnItemClickListener(getEditListener());
         return view;
     }
 

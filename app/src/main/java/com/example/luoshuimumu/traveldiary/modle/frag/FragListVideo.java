@@ -31,8 +31,6 @@ import java.util.ArrayList;
 public class FragListVideo extends AbsFragxxxList {
     ListView mListView;
 
-    private OnFragmentInteractionListener mListener;
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -68,6 +66,8 @@ public class FragListVideo extends AbsFragxxxList {
         mListView = (ListView) view.findViewById(R.id.listview);
         mAdapter = new VideoAdapter(getActivity());
         mListView.setAdapter(mAdapter);
+
+        mListView.setOnItemClickListener(getEditListener());
         return view;
     }
 

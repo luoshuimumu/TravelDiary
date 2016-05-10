@@ -31,7 +31,6 @@ import java.util.ArrayList;
  */
 public class FragListText extends AbsFragxxxList {
     ListView mListView;
-    private OnFragmentInteractionListener mListener;
 
     /**
      * Use this factory method to create a new instance of
@@ -69,8 +68,7 @@ public class FragListText extends AbsFragxxxList {
         mAdapter = new TextAdapter(getActivity());
         mListView.setAdapter(mAdapter);
 
-        initEditMode(mListView);
-        mListView.setOnItemClickListener(mAbsListener);
+        mListView.setOnItemClickListener(getEditListener());
         return view;
     }
 
