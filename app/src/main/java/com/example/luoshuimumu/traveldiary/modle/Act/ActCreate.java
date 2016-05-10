@@ -37,6 +37,7 @@ import com.example.luoshuimumu.traveldiary.modle.frag.ViewPagerAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -46,15 +47,49 @@ import java.util.TreeSet;
 
 public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFragmentInteractionListener {
     public static boolean FLAG_EDIT_MODE = true;
-    //持有五个fragment的编辑状态缓存列表,在新建fragment时传输过去
-    private Set<MediaEntity> mTextChoosedList = new TreeSet<>();
-    private Set<MediaEntity> mPicChoosedList = new TreeSet<>();
-    private Set<MediaEntity> mAudioChoosedList = new TreeSet<>();
-    private Set<MediaEntity> mVideoChoosedList = new TreeSet<>();
-    private Set<MediaEntity> mTraceChoosedList = new TreeSet<>();
+//    //持有五个fragment的编辑状态缓存列表,在新建fragment时传输过去
+//    private Set<MediaEntity> mTextChoosedList = new TreeSet<>();
+//    private Set<MediaEntity> mPicChoosedList = new TreeSet<>();
+//    private Set<MediaEntity> mAudioChoosedList = new TreeSet<>();
+//    private Set<MediaEntity> mVideoChoosedList = new TreeSet<>();
+//    private Set<MediaEntity> mTraceChoosedList = new TreeSet<>();
+
+    private Set<MediaEntity> mMediaChoosedList = new TreeSet<>();
+    public static final String EDIT_MODE_ADD = "add";
+    public static final String EDIT_MODE_DELETE = "delete";
 
     @Override
-    public void onFragmentInteraction(MediaEntity entity, String mode) {
+    public void onFragmentInteraction(MediaEntity entity, String mode, String type) {
+        if (mode.equals("add")) {
+            mMediaChoosedList.add(entity);
+        } else if (mode.equals("delete")) {
+            mMediaChoosedList.remove(entity);
+        }
+//        switch (type){
+//            case MediaEntity.TYPE_TEXT:
+//                    if(mode.equals("add")){
+//                        mTextChoosedList.add(entity);
+//                    }else {
+//                        mTextChoosedList.remove(entity);
+//                    }
+//                break;
+//            case MediaEntity.TYPE_PIC:
+//                if(mode.equals("add")){
+//                    mTextChoosedList.add(entity);
+//                }else {
+//                    mTextChoosedList.remove(entity);
+//                }
+//                break;
+//            case MediaEntity.TYPE_AUDIO:
+//
+//                break;
+//            case MediaEntity.TYPE_VIDEO:
+//
+//                break;
+//            case MediaEntity.TYPE_TRACE:
+//
+//                break;
+//        }
     }
 
 //    /**
@@ -612,9 +647,36 @@ public class ActCreate extends ActionBarActivity implements AbsFragxxxList.OnFra
                 return true;
             case R.id.action_edit_mode:
 
-                FLAG_EDIT_MODE = !FLAG_EDIT_MODE;
-                Log.e("FLAG_EDIT_MODE", String.valueOf(FLAG_EDIT_MODE));
+
+                if (FLAG_EDIT_MODE) {
+                    //这里需要清除所有的列表
+                    FLAG_EDIT_MODE = false;
+                    mMediaChoosedList = new TreeSet<>();
+                    //清空fragment的缓存列表
+
+
+                    Iterator iterator = mFragUIHandlerList.entrySet().iterator();
+                    while (iterator.hasNext()) {
+                        Message msg = new Message();
+                        msg.what = AbsFragxxxList.MSG_CLEAR_DATA;
+                        Map.Entry entity = (Map.Entry) iterator.next();
+//                        String key = (String) entity.getKey();
+                        Handler handler = (Handler) entity.getValue();
+                        handler.sendMessage(msg);
+                    }
+                } else {
+                    FLAG_EDIT_MODE = true;
+                }
                 refreshUI();
+
+                return true;
+            case R.id.action_create_diary:
+                StringBuffer sb = new StringBuffer();
+                Iterator iterator = mMediaChoosedList.iterator();
+                while ((iterator.hasNext())) {
+                    sb.append(((MediaEntity) iterator.next()).getId() + ",");
+                }
+                Log.e("mMediaChoosedList", sb.toString());
 
                 return true;
             default:

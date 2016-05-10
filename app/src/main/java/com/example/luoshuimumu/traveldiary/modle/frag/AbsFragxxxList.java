@@ -35,6 +35,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+
+// TODO: 2016/5/10 新插入了媒体项目导致编辑模式的缓存失效
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
@@ -46,6 +49,8 @@ import java.util.TreeSet;
 public abstract class AbsFragxxxList extends Fragment {
     static public final int MSG_REFRESH_UI = 1;
     static public final int MSG_REFRESH_DATA = 2;
+    static public final int MSG_CLEAR_DATA = 3;
+
     //数据初始化模块
     private boolean FLAG_DATA_INIT_COMPLETE = false;
     private Dialog mWaitDialog;
@@ -87,6 +92,10 @@ public abstract class AbsFragxxxList extends Fragment {
                 case MSG_REFRESH_UI:
                     refreshUI();
                     break;
+                case MSG_CLEAR_DATA:
+                    mEditStateDataList = new ArrayList<>();
+                    saveState();
+                    break;
                 default:
                     break;
 
@@ -95,7 +104,6 @@ public abstract class AbsFragxxxList extends Fragment {
     };
 
     //与activity交互
-    // TODO: 2016/5/10 这函数好像没卵用
     private void refreshUI() {
         mAdapter.notifyDataSetChanged();
     }
@@ -244,17 +252,16 @@ public abstract class AbsFragxxxList extends Fragment {
         mAbsListener = new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e(this.getClass().getSimpleName(), "onItemClick:" + position);
                 if (!ActCreate.FLAG_EDIT_MODE) return;
                 ViewHolder holder = (ViewHolder) view.getTag();
                 MediaEntity entity = mDataList.get(position);
                 //若未被选择即加入
                 if (!holder.isChoosed) {
-                    onButtonPressed(entity, "add");
+                    onButtonPressed(entity, ActCreate.EDIT_MODE_ADD, mParam1);
                     //同时更新本地列表的状态
                     mEditStateDataList.add(entity.getId());
                 } else {
-                    onButtonPressed(entity, "delete");
+                    onButtonPressed(entity, ActCreate.EDIT_MODE_DELETE, mParam1);
                     String temp = entity.getId();
                     for (int i = 0; i < mEditStateDataList.size(); i++) {
                         if (temp.equals(mEditStateDataList.get(i))) {
@@ -269,6 +276,13 @@ public abstract class AbsFragxxxList extends Fragment {
             }
         };
         return mAbsListener;
+    }
+
+    // TODO: Rename method, update argument and hook method into UI event
+    public void onButtonPressed(MediaEntity entity, String mode, String type) {
+        if (mListener != null) {
+            mListener.onFragmentInteraction(entity, mode, type);
+        }
     }
 
     protected class ViewHolder {
@@ -333,12 +347,6 @@ public abstract class AbsFragxxxList extends Fragment {
         return inflater.inflate(R.layout.fragment_abs_fragxxx_list, container, false);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(MediaEntity entity, String mode) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(entity, mode);
-        }
-    }
 
     @Override
     public void onAttach(Context activity) {
@@ -371,7 +379,7 @@ public abstract class AbsFragxxxList extends Fragment {
      */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onFragmentInteraction(MediaEntity entity, String mode);
+        public void onFragmentInteraction(MediaEntity entity, String mode, String type);
     }
 
 //    abstract public void refreshLocation();
